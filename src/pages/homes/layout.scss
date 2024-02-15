@@ -1,0 +1,48 @@
+.layout_comtainer {
+    max-width: 100vw;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .layout_body_container {
+        max-width: 1440px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between !important;
+
+    }
+
+}
+
+@media screen and (max-width: 390px) {
+    .layout_body_container {
+        min-height: 100vh;
+    }
+
+}
+
+
+
+.box-navbar {
+    display: block !important;
+    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    height: 100%;
+    transition: transform 0.3s ease;
+    transform-origin: top center;
+    margin-bottom: 20px;
+}
+
+
+.login-box {
+    width: 100vw;
+    height: 100%;
+    position: fixed;
+    top:0;
+    z-index: 10;
+}

@@ -1,0 +1,28 @@
+name: Deploy
+on:
+  push:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:       
+    - name: Kết nối ssh linux -> và pull
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        password: ${{ secrets.PASS }}
+        port: 22
+        script: |
+          cd /var/www/ern_lms_client
+          git pull
+           . $HOME/.nvm/nvm.sh
+          git status
+          nvm use
+          cp .env.example .env
+          sed -i 's|http:\/\/127.0.0.1:4000\/api\/v1|https:\/\/client.miao.io.vn\/api\/v1|g' .env
+          npm ci
+          npm run build
+          echo "Reset Bộ Nhớ Swap"
+          sudo swapoff -a; sudo swapon -a
+           curl -X POST -H "Content-Type: application/json" -H "Authorization: ODg4NzMyMDYyNTQ5NDMwMjk0.Gz7-6o.eftqSZf4a_Ku9GvQhFx30YeTZvSoG8K7BDRr10" -d '{"content":"Cáo: Client đã được cập nhật.. link git:https://github.com/tieucamieu/ern_lms_client , link domain:https://client.mieuteacher.io.vn/"}' https://discord.com/api/v9/channels/1197725837735239691/messages

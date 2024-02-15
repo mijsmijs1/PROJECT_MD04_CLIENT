@@ -1,0 +1,239 @@
+.top_up_box {
+    width: 60%;
+    // height: 80%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: $superColor;
+    padding: 15px;
+    border-radius: 20px;
+    z-index: 2;
+    .exit{
+        position: absolute;
+        top: 0;
+        right: 15px;
+        font-size: 40px;
+        cursor: pointer;
+    }
+    h2{
+        color: $greenColor;
+        font-weight: 600;
+    }
+    select{
+        font-size: $l;
+    }
+    .QR_bank {
+        width: 100%;
+        background-color: #ffffff;
+        padding: 10px;
+        border: 3px solid $greenColor;
+        border-radius: 20px;
+        margin-top: 20px;
+        // height: 70%;
+        h4{
+            ion-icon{
+                margin-right: 5px;
+            }
+        }
+        .QR_content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            // justify-content: center;
+        }
+
+        .manual {
+            width: 100%;
+            height: 40%;
+            // background-color: #fff;
+
+            .manual_content {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                margin-top: 20px;
+                .right{
+                    width: 50%;
+                    margin-left: 20px;
+                    .manual_info {
+                        width: 96%;
+                        height: 60px;
+                        background-color: rgb(240, 236, 236);
+                        padding: 5px 16px;
+                        border-radius: 8px;
+                        margin-bottom: 5px;
+                        .top{
+                            margin-bottom: 5px;
+                            span{
+                                font-size: $s;
+                            }
+                        }
+                        .bottom{
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+                            span{
+                                font-size: $m;
+                            }
+                            img{
+                                cursor: pointer;
+                            }
+                        }
+                    }
+                }
+                .left{
+                    width: 50%;
+                    .manual_info {
+                        width: 96%;
+                        height: 60px;
+                        background-color: rgb(240, 236, 236);
+                        padding: 5px 16px;
+                        border-radius: 8px;
+                        margin-bottom: 5px;
+                        .top{
+                            margin-bottom: 5px;
+                            span{
+                                font-size: $s;
+                            }
+                        }
+                        .bottom{
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+                            span{
+                                font-size: $m;
+                            }
+                            img{
+                                cursor: pointer;
+                            }
+                        }
+                    }
+                }
+                
+            }
+
+        }
+
+    }
+    .QR_zaloPay {
+        width: 100%;
+        background-color: #ffffff;
+        padding: 10px;
+        border: 3px solid $greenColor;
+        border-radius: 20px;
+        margin-top: 20px;
+        // height: 70%;
+        h4{
+            img{
+                width: 30px;
+                height: 30px;
+                margin-right: 10px;
+            }
+            .zaloPay{
+                width: 100px;
+                height: 30px;
+                margin-left: 10px;
+            }
+        }
+        .QR_content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            // justify-content: center;
+        }
+
+        .manual {
+            width: 100%;
+            height: 40%;
+            // background-color: #fff;
+
+            .manual_content {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                margin-top: 20px;
+                .right{
+                    width: 50%;
+                    margin-left: 20px;
+                    .manual_info {
+                        width: 96%;
+                        height: 60px;
+                        background-color: rgb(240, 236, 236);
+                        padding: 5px 16px;
+                        border-radius: 8px;
+                        margin-bottom: 5px;
+                        .top{
+                            margin-bottom: 5px;
+                            span{
+                                font-size: $s;
+                            }
+                        }
+                        .bottom{
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+                            span{
+                                font-size: $m;
+                            }
+                            img{
+                                cursor: pointer;
+                            }
+                        }
+                    }
+                }
+                .left{
+                    width: 50%;
+                    .manual_info {
+                        width: 96%;
+                        height: 60px;
+                        background-color: rgb(240, 236, 236);
+                        padding: 5px 16px;
+                        border-radius: 8px;
+                        margin-bottom: 5px;
+                        .top{
+                            margin-bottom: 5px;
+                            span{
+                                font-size: $s;
+                            }
+                        }
+                        .bottom{
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+                            span{
+                                font-size: $m;
+                            }
+                            img{
+                                cursor: pointer;
+                            }
+                        }
+                    }
+                }
+                
+            }
+
+        }
+
+    }
+    .warning{
+        margin-top: 30px;
+        h4{
+            color: $orangeColor;
+        }
+        .contact{
+            margin-bottom: 20px;
+            .contact_info{
+                margin-bottom: 10px;
+                span{
+                    margin-left: 5px;
+                }
+            }
+           
+        }
+    }
+}
