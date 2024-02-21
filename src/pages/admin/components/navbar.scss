@@ -1,0 +1,22 @@
+.user {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-left: 10px;
+    }
+    .dropdown {
+        button{
+            span{
+                color: black;
+            }
+        }
+        .dropdown-toggle {
+            outline: unset !important;
+            border: unset !important;
+            background-color: transparent !important;
+        }
+    }}

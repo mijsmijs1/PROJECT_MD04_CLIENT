@@ -1,0 +1,938 @@
+.admin_page {
+    width: 100%;
+    height: 100vh;
+    background: #eee url('https://media.istockphoto.com/id/1330248664/vector/hexagonal-and-rectangular-abstracts-with-a-digital-network-image-blue-gradient-background.jpg?s=612x612&w=0&k=20&c=JgeKAVSAO_S-A0r61OP99BqNduP0CXE7gvc0jjoAD4Q=');
+
+    nav {
+        width: 100%;
+        height: 60px;
+        background-color: $primaryColor;
+        padding: 10px 100px;
+        font-size: $m;
+        display: flex;
+        justify-content: space-between;
+
+        .logo {
+            height: 100%;
+            display: flex;
+            align-items: center;
+
+            img {
+                height: 50px;
+            }
+
+            .phuquy {
+                width: 200px;
+            }
+
+            .menu-btn {
+                display: none;
+            }
+        }
+
+        .log-out {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+
+            .md {
+                font-size: 30px;
+                color: red;
+            }
+
+        }
+
+    }
+
+    .admin_container {
+        width: 100%;
+        height: calc(100vh - 60px);
+        display: flex;
+
+        .menu_bar {
+            width: 210px;
+            height: 100%;
+            background: url('https://png.pngtree.com/background/20210715/original/pngtree-mint-green-minimalistic-geometric-background-picture-image_1297251.jpg');
+            background-size: cover;
+            transition: all 0.2s;
+            transform: translateX(0%);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 10px;
+            opacity: 1;
+
+            &.hidden {
+                width: 0px;
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+
+            
+
+            .menu_item {
+                font-family: $fontKanit;
+
+                .my-button {
+                    background-color: blueviolet;
+                    border: none;
+                    width: 100%;
+                    height: 35px;
+                    color: white;
+                    padding: 5px 20px;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-size: 16px;
+                    border-radius: 5px;
+                    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+                    position: relative;
+                    overflow: hidden;
+
+                    .md {
+                        margin-right: 10px !important;
+                    }
+                }
+
+                .my-button:after {
+                    content: "";
+                    background-color: rgba(255, 255, 255, 0.2);
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: 5px;
+                    height: 5px;
+                    border-radius: 50%;
+                    transform: translate(-50%, -50%);
+                    opacity: 0;
+                }
+
+                .my-button:hover:after {
+                    animation: ripple_401 1s ease-out;
+                }
+
+                @keyframes ripple_401 {
+                    0% {
+                        width: 5px;
+                        height: 5px;
+                        opacity: 1;
+                    }
+
+                    100% {
+                        width: 200px;
+                        height: 200px;
+                        opacity: 0;
+                    }
+                }
+
+                .menu_item_main {}
+
+                .menu_item_sub {
+                    cursor: pointer;
+                    margin: 7px -25px;
+                    transform: translateY(0);
+                    opacity: 1;
+                    transition: all 0.2s;
+                    height: 100px;
+
+                    li {
+                        list-style: none;
+
+                        &:hover {
+                            transform: scale(1.1);
+                        }
+                    }
+
+                    &.hidden {
+                        height: 0;
+                        transform: translateY(-100%);
+                        opacity: 0;
+                    }
+
+                }
+            }
+        }
+
+        .content {
+            transition: all 0.2s;
+            flex: 1;
+            height: 100%;
+            background: transparent;
+            padding: 10px;
+
+            .history {
+                width: 100%;
+                height: 30px;
+                font-size: $m;
+                display: flex;
+                align-items: center;
+                background-color: white;
+                padding: 5px;
+                border-radius: 5px;
+                margin-bottom: 5px;
+
+                span {
+                    margin-left: 5px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+
+                    &:hover {
+                        color: rgb(197, 138, 249);
+                        font-weight: 900;
+                        transform: scale(1.1);
+                    }
+
+                    &:hover::before {
+                        color: black;
+                        transform: unset;
+                        font-weight: normal;
+                    }
+
+                    &::before {
+                        content: "/";
+                        display: inline-block;
+                        width: 5px;
+                        height: 100%;
+                        margin-right: 10px;
+                        cursor: unset;
+                        text-align: center;
+                    }
+
+                    &:first-child::before {
+                        content: "";
+                    }
+                }
+            }
+
+            .content_body {
+                width: 100%;
+                font-size: $m;
+                padding: 15px;
+                border-radius: 5px;
+                background-color: white;
+                height: calc(100vh - (60px + 60px));
+                position: relative;
+
+                .product_create_form {
+                    width: 100%;
+                    height: 100%;
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background-color: rgba(grey, 0.7);
+                    padding: 10px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    form {
+                        padding: 10px;
+                        width: 450px;
+                        height: 700px;
+                        border-radius: 10px;
+                        background-color: white;
+                        box-shadow: 2px 2px 2px 2px rgb(102, 101, 101);
+                        position: relative;
+
+                        .btn_box {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 20px;
+
+                            span {
+                                font-family: $fontKanit;
+                                font-size: $l;
+                            }
+                        }
+
+                        .btn-success {
+                            position: absolute;
+                            bottom: 10px;
+                            right: 10px;
+                        }
+
+                        .input_avatar {
+                            width: 100px;
+                            height: 100px;
+                            border-radius: 50%;
+                            position: relative;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            img {
+                                width: 100%;
+                                height: 100%;
+                                border-radius: 50%;
+                                cursor: pointer;
+                            }
+
+                            span {
+                                position: absolute;
+                                z-index: 1;
+                                color: white;
+                                font-weight: 900;
+                                font-size: $l * 2;
+                                text-shadow: 2px 2px 2px black;
+                            }
+
+                            input {
+                                position: absolute;
+                                opacity: 0;
+                                width: 100%;
+                                height: 100%;
+                                z-index: 2;
+                                top: 0;
+                                left: 0;
+                                cursor: pointer;
+                            }
+                        }
+
+                        .pictures {
+                            display: flex;
+                            flex-wrap: wrap;
+
+                            .item {
+                                width: 75px;
+                                height: 75px;
+                                border-radius: 50%;
+                                margin: 0 10px 10px 0;
+                                position: relative;
+
+                                img {
+                                    width: 100%;
+                                    height: 100%;
+                                }
+
+                                .btn-danger {
+                                    border-radius: 5px;
+                                    position: absolute;
+                                    padding: 0;
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .product_describe_form {
+                    width: 100%;
+                    height: 100%;
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background-color: rgba(grey, 0.7);
+                    padding: 10px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    form {
+                        padding: 10px;
+                        width: 450px;
+                        height: 250px;
+                        border-radius: 10px;
+                        background-color: white;
+                        box-shadow: 2px 2px 2px 2px rgb(102, 101, 101);
+                        position: relative;
+
+                        textarea {
+                            height: 100px;
+                        }
+
+                        .btn_box {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 10px;
+
+                            span {
+                                font-family: $fontKanit;
+                                font-size: $l;
+                            }
+                        }
+
+                        .btn-success {
+                            position: absolute;
+                            bottom: 10px;
+                            right: 10px;
+                        }
+
+                        .input_avatar {
+                            width: 100px;
+                            height: 100px;
+                            border-radius: 50%;
+                            position: relative;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            img {
+                                width: 100%;
+                                height: 100%;
+                                border-radius: 50%;
+                                cursor: pointer;
+                            }
+
+                            span {
+                                position: absolute;
+                                z-index: 1;
+                                color: white;
+                                font-weight: 900;
+                                font-size: $l * 2;
+                                text-shadow: 2px 2px 2px black;
+                            }
+
+                            input {
+                                position: absolute;
+                                opacity: 0;
+                                width: 100%;
+                                height: 100%;
+                                z-index: 2;
+                                top: 0;
+                                left: 0;
+                                cursor: pointer;
+                            }
+                        }
+
+                    }
+                }
+
+                .product_detail_form {
+                    width: 100%;
+                    height: 100%;
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background-color: rgba(grey, 0.7);
+                    padding: 10px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    .form_container {
+                        padding: 10px;
+                        width: 700px;
+                        height: 700px;
+                        border-radius: 10px;
+                        background-color: white;
+                        box-shadow: 2px 2px 2px 2px rgb(102, 101, 101);
+                        position: relative;
+
+                        .btn_box {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 20px;
+
+                            span {
+                                font-family: $fontKanit;
+                                font-size: $l;
+                            }
+                        }
+
+                        form {
+                            width: 680px;
+                            height: 550px;
+                            overflow: auto;
+                            position: absolute;
+                            top: 60px;
+                            left: 0;
+                            margin-left: 10px;
+
+
+                            h4 {
+                                font-size: 20px;
+                                margin-bottom: 20px;
+                            }
+
+                            .btn-success {
+                                position: fixed;
+                                bottom: 14%;
+                                right: 62%;
+                                padding: 10px 30px;
+                                font-size: 20px;
+                            }
+
+                            .input_avatar {
+                                width: 100px;
+                                height: 100px;
+                                border-radius: 50%;
+                                position: relative;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+
+                                img {
+                                    width: 100%;
+                                    height: 100%;
+                                    border-radius: 50%;
+                                    cursor: pointer;
+                                }
+
+                                span {
+                                    position: absolute;
+                                    z-index: 1;
+                                    color: white;
+                                    font-weight: 900;
+                                    font-size: $l * 2;
+                                    text-shadow: 2px 2px 2px black;
+                                }
+
+                                input {
+                                    position: absolute;
+                                    opacity: 0;
+                                    width: 100%;
+                                    height: 100%;
+                                    z-index: 2;
+                                    top: 0;
+                                    left: 0;
+                                    cursor: pointer;
+                                }
+                            }
+
+                            .pictures {
+                                display: flex;
+                                flex-wrap: wrap;
+
+                                .item {
+                                    width: 75px;
+                                    height: 75px;
+                                    border-radius: 50%;
+                                    margin: 0 10px 10px 0;
+                                    position: relative;
+
+                                    img {
+                                        width: 100%;
+                                        height: 100%;
+                                    }
+
+                                    .btn-danger {
+                                        border-radius: 5px;
+                                        position: absolute;
+                                        top: -$m / 2;
+                                        right: -$m / 2;
+                                        font-size: $m;
+                                        padding: 0;
+                                        width: $m * 1.5;
+                                        height: $m * 1.5;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .category_create_form {
+                    width: 100%;
+                    height: 100%;
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background-color: rgba(grey, 0.7);
+                    padding: 10px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    form {
+                        padding: 10px;
+                        width: 450px;
+                        height: 280px;
+                        border-radius: 10px;
+                        background-color: white;
+                        box-shadow: 2px 2px 2px 2px rgb(102, 101, 101);
+                        position: relative;
+
+                        .btn_box {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 20px;
+
+                            span {
+                                font-family: $fontKanit;
+                                font-size: $l;
+                            }
+                        }
+
+                        .btn-success {
+                            position: absolute;
+                            bottom: 10px;
+                            right: 10px;
+                        }
+
+                        .input_avatar {
+                            width: 100px;
+                            height: 100px;
+                            border-radius: 50%;
+                            position: relative;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            img {
+                                width: 100%;
+                                height: 100%;
+                                border-radius: 50%;
+                                cursor: pointer;
+                            }
+
+                            span {
+                                position: absolute;
+                                z-index: 1;
+                                color: white;
+                                font-weight: 900;
+                                font-size: $l * 2;
+                                text-shadow: 2px 2px 2px black;
+                            }
+
+                            input {
+                                position: absolute;
+                                opacity: 0;
+                                width: 100%;
+                                height: 100%;
+                                z-index: 2;
+                                top: 0;
+                                left: 0;
+                                cursor: pointer;
+                            }
+                        }
+
+                        .pictures {
+                            display: flex;
+                            flex-wrap: wrap;
+
+                            .item {
+                                width: 75px;
+                                height: 75px;
+                                border-radius: 50%;
+                                margin: 0 10px 10px 0;
+                                position: relative;
+
+                                img {
+                                    width: 100%;
+                                    height: 100%;
+                                }
+
+                                .btn-danger {
+                                    border-radius: 5px;
+                                    position: absolute;
+                                    top: -$m / 2;
+                                    right: -$m / 2;
+                                    font-size: $m;
+                                    padding: 0;
+                                    width: $m * 1.5;
+                                    height: $m * 1.5;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .user_create_form {
+                    width: 100%;
+                    height: 100%;
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background-color: rgba(grey, 0.7);
+                    padding: 10px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    form {
+                        padding: 10px;
+                        width: 450px;
+                        height: 450px;
+                        border-radius: 10px;
+                        background-color: white;
+                        box-shadow: 2px 2px 2px 2px rgb(102, 101, 101);
+                        position: relative;
+
+                        .btn_box {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 20px;
+
+                            span {
+                                font-family: $fontKanit;
+                                font-size: $l;
+                            }
+                        }
+
+                        .btn-success {
+                            position: absolute;
+                            bottom: 10px;
+                            right: 10px;
+                        }
+
+                        .input_avatar {
+                            width: 100px;
+                            height: 100px;
+                            border-radius: 50%;
+                            position: relative;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            img {
+                                width: 100%;
+                                height: 100%;
+                                border-radius: 50%;
+                                cursor: pointer;
+                            }
+
+                            span {
+                                position: absolute;
+                                z-index: 1;
+                                color: white;
+                                font-weight: 900;
+                                font-size: $l * 2;
+                                text-shadow: 2px 2px 2px black;
+                            }
+
+                            input {
+                                position: absolute;
+                                opacity: 0;
+                                width: 100%;
+                                height: 100%;
+                                z-index: 2;
+                                top: 0;
+                                left: 0;
+                                cursor: pointer;
+                            }
+                        }
+
+                        .pictures {
+                            display: flex;
+                            flex-wrap: wrap;
+
+                            .item {
+                                width: 75px;
+                                height: 75px;
+                                border-radius: 50%;
+                                margin: 0 10px 10px 0;
+                                position: relative;
+
+                                img {
+                                    width: 100%;
+                                    height: 100%;
+                                }
+
+                                .btn-danger {
+                                    border-radius: 5px;
+                                    position: absolute;
+                                    top: -$m / 2;
+                                    right: -$m / 2;
+                                    font-size: $m;
+                                    padding: 0;
+                                    width: $m * 1.5;
+                                    height: $m * 1.5;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .user_edit_form {
+                    width: 100%;
+                    height: 100%;
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background-color: rgba(grey, 0.7);
+                    padding: 10px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    form {
+                        padding: 10px;
+                        width: 450px;
+                        height: 500px;
+                        border-radius: 10px;
+                        background-color: white;
+                        box-shadow: 2px 2px 2px 2px rgb(102, 101, 101);
+                        position: relative;
+
+                        .btn_box {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 20px;
+
+                            span {
+                                font-family: $fontKanit;
+                                font-size: $l;
+                            }
+                        }
+
+                        .btn-success {
+                            position: absolute;
+                            bottom: 10px;
+                            right: 10px;
+                        }
+
+                        .input_avatar {
+                            width: 100px;
+                            height: 100px;
+                            border-radius: 50%;
+                            position: relative;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            img {
+                                width: 100%;
+                                height: 100%;
+                                border-radius: 50%;
+                                cursor: pointer;
+                            }
+
+                            span {
+                                position: absolute;
+                                z-index: 1;
+                                color: white;
+                                font-weight: 900;
+                                font-size: $l * 2;
+                                text-shadow: 2px 2px 2px black;
+                            }
+
+                            input {
+                                position: absolute;
+                                opacity: 0;
+                                width: 100%;
+                                height: 100%;
+                                z-index: 2;
+                                top: 0;
+                                left: 0;
+                                cursor: pointer;
+                            }
+                        }
+
+                        .pictures {
+                            display: flex;
+                            flex-wrap: wrap;
+
+                            .item {
+                                width: 75px;
+                                height: 75px;
+                                border-radius: 50%;
+                                margin: 0 10px 10px 0;
+                                position: relative;
+
+                                img {
+                                    width: 100%;
+                                    height: 100%;
+                                }
+
+                                .btn-danger {
+                                    border-radius: 5px;
+                                    position: absolute;
+                                    top: -$m / 2;
+                                    right: -$m / 2;
+                                    font-size: $m;
+                                    padding: 0;
+                                    width: $m * 1.5;
+                                    height: $m * 1.5;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .table_container {
+                    width: 100%;
+                    height: 100%;
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background-color: rgba(grey, 0.7);
+                    padding: 10px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    
+                    .table_content {
+                        width: 60%;
+                        background-color: #fff;
+                        padding: 10px;
+
+                        Table {
+                            width: 100%;
+                        }
+
+                        .btn_box {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 20px;
+                            background-color: #fff;
+
+                            span {
+                                font-family: $fontKanit;
+                                font-size: $l;
+                                margin-right: 50px;
+                            }
+                        }
+                    }
+                    .table_receipt{
+                        width: 90%;
+                    }
+
+                }
+            }
+        }
+    }
+}
+.item_container_title{
+    display: flex !important;
+    gap: 30px;
+    align-items: center;
+    // justify-content: center;
+    img{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+    :nth-child(2) {
+        max-width: 30%;  
+    }
+    :nth-child(3) {
+        margin-left: 90px;
+    }
+    :nth-child(4) {
+        margin-left: 5px;
+    }
+}
+.item_container {
+    display: flex !important;
+    gap: 30px;
+    align-items: center;
+    // justify-content: center;
+    img{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+    p{
+        margin: 0;
+    }
+    :nth-child(2) {
+        max-width: 40%;
+        margin-left: 15px;
+    }
+
+}

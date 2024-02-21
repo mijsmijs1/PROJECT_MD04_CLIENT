@@ -1,0 +1,38 @@
+.user {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    border: 1px solid $pupleColor;
+    border-radius: 8px;
+
+    img {
+        width: 100px !important;
+        height: 100px;
+        border-radius: 50%;
+        border: 2px solid black;
+        padding: 5px;
+    }
+
+    .dropdown {
+        .dropdown-toggle {
+            outline: unset !important;
+            border: unset !important;
+            background-color: transparent !important;
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center !important;
+            align-items: center;
+
+            span {
+                color: $secondaryColor;
+
+            }
+        }
+    }
+   
+}
+.dropdown .dropdown-menu {
+    transform: translate(1%, 165%) !important;
+}

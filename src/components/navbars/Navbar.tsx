@@ -13,19 +13,40 @@ import TopUpForm from "../topUpForm/TopUpForm";
 import { useTranslation } from "react-i18next";
 import MultiLanguage from "../multiLang/MultiLang";
 import { logout } from "@/service/firebase";
+import { api } from "@/service/apis";
 export default function Navbar({ modalVisible, setModalVisible }) {
   const { t } = useTranslation();
   const dispatch = useDispatch()
   const userStore = useSelector((store: Store) => store.userStore)
+  const categoryStore = useSelector((store: Store) => store.categoryStore)
+  const receiptStore = useSelector((store: Store) => store.receiptStore)
   const navigate = useNavigate();
   const [showNavbar, setShowNavbar] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [searchContent, setSearchContent] = useState([])
+  const [typingTimeout, setTypingTimeout] = useState(null);
+  const [keyword, setKeyword] = useState(null);
   const [isScrollingDown, setIsScrollingDown] = useState(false);
-  const [showTopUpForm, setShowTopUpForm] = useState(false)
-  function handleShowSearch(searchKey: string) {
-    console.log("searchKey", searchKey);
+  const [showTopUpForm, setShowTopUpForm] = useState(false);
+  const [category, setCategory] = useState(null)
+  async function handleShowSearch(searchKey: string) {
+
+
     if (searchKey.length > 0) {
+      setKeyword(searchKey);
       setShowSearch(true);
+      if (typingTimeout) {
+        clearTimeout(typingTimeout);
+        setSearchContent([]);
+      }
+      setTypingTimeout(setTimeout(async () => {
+        let result = await api.product.getProductSearch(searchKey)
+        if (result.status == 200) {
+          if (Object.keys(result.data.data).length != 0) {
+            setSearchContent(Object.values(result.data.data))
+          }
+        }
+      }, 1000))
     } else if (searchKey == "") {
       setShowSearch(false)
     }
@@ -54,11 +75,16 @@ export default function Navbar({ modalVisible, setModalVisible }) {
   const springProps = useSpring({
     paddingTop: isScrollingDown ? "20px" : "40px",
     paddingBottom: isScrollingDown ? "20px" : "40px",
-    backgroundColor: isScrollingDown ? "#8099DD" : "#ffff",
+    backgroundColor: isScrollingDown ? "#ffff" : "#ffff",
     borderRadius: isScrollingDown ? "10px" : "10px",
     // borderBottom: isScrollingDown ? "2px solid  " : "1px solid ",
   });
-
+  const handleMouseEnter = (cate) => {
+    setCategory(cate)
+  }
+  const handleMouseLeave = () => {
+    setCategory(null)
+  }
   return (
     <div className="nav_box">
       <div className="nav_top">
@@ -88,18 +114,75 @@ export default function Navbar({ modalVisible, setModalVisible }) {
               <ion-icon name="apps-outline"></ion-icon>
               <p>Danh mục</p>
               <ion-icon name="chevron-down-outline"></ion-icon>
+              {
+                categoryStore.category && (
+                  <div className='sup_menu'
+                    onMouseLeave={handleMouseLeave}>
+
+                    {
+                      categoryStore.category.map(supItem => {
+
+
+                        return (
+                          <div onClick={() => {
+                            navigate(`/search?category=${supItem.codeName}`)
+                          }}
+                            key={Date.now() * Math.random()}
+                            className='sup_menu_item'
+                            onMouseEnter={() => { handleMouseEnter(supItem) }}
+
+                          >
+                            <img src={String(supItem.avatar)}></img>
+                            <span>{supItem.name}</span>
+
+                          </div>
+                        )
+                      })}
+                    {category && <div className="child_box">
+                      {
+                        category && category.branches.map(branch => {
+                          return (
+                            <div onClick={() => {
+                              navigate(`/search?category=${category.codeName}&&branch=${branch.codeName}`)
+                            }}
+                              key={Date.now() * Math.random()}
+                              className='sup_menu_item_child'>
+                              <span>{branch.name}</span>
+                            </div>
+                          )
+                        })
+                      }
+                    </div>}
+                  </div>
+                )
+              }
+
             </div>
           </div>
 
           <div className="search">
-            <i className="fa-solid fa-magnifying-glass"></i>
+            <i className="fa-solid fa-magnifying-glass" onClick={() => {
+              if (keyword) {
+                window.location.href = `/search?keyword=${keyword}`
+              }
+            }}></i>
             <input type="text" placeholder={t('navbar.placeHolderSearch')} onChange={(e) => handleShowSearch(e.target.value)} />
             {showSearch ?
               <div className="search_content_container">
                 <p className="result-search-title">Kết quả tìm kiếm tương ứng </p>
                 <div className="result-search-content">
                   <div className="result-search-item">
-                    <span>Khoá Học Tiếng Anh cơ bản</span>
+                    {
+                      searchContent.length > 0 ? searchContent?.map(item => {
+                        return (<span
+                          onClick={() => {
+                            window.location.href = `product-info?productId=${item.id}`
+                          }}
+                        >{item.name}</span>)
+                      }) : (<span>{`Không tìm thấy kết quả nào! `} <i className="fa-regular fa-face-sad-tear"></i></span>)
+
+                    }
+
                   </div>
                 </div>
               </div> : <></>}
@@ -145,6 +228,19 @@ export default function Navbar({ modalVisible, setModalVisible }) {
                     ></path>
                   </svg>
                 </button> : <>
+                  <div className='cart_box'
+                  onClick={() => {
+                    navigate("/cart")
+                  }}>
+                    <i className="fa-brands fa-shopify"></i>
+                    <span>
+                      ({
+                        receiptStore.cart?.detail?.reduce((total, cur) => {
+                          return total + cur.quantity
+                        }, 0) || 0
+                      })
+                    </span>
+                  </div>
                   <div className="user_box">
                     <Dropdown>
                       <Dropdown.Toggle variant="success" id="dropdown-basic">
@@ -160,6 +256,9 @@ export default function Navbar({ modalVisible, setModalVisible }) {
                         <Dropdown.Item onClick={() => {
                           window.location.href = "/wallet"
                         }}>{t('navbar.wallet')}</Dropdown.Item>
+                        <Dropdown.Item onClick={() => {
+                          window.location.href = `/user_page/${userStore.data?.id}`
+                        }}>Tin của bạn</Dropdown.Item>
                         <Dropdown.Item onClick={() => {
                           Modal.confirm({
                             title: "Xác nhận",
@@ -180,7 +279,8 @@ export default function Navbar({ modalVisible, setModalVisible }) {
           <button className="button_up" onClick={() => {
             if (userStore.data) { navigate("/post") } else {
               message.warning('Bạn chưa đăng nhập!');
-              openModal() };
+              openModal()
+            };
           }}><i className="fa-solid fa-pen-to-square" ></i> Đăng tin</button>
         </animated.div>
         <div className="navbar_mobile_child"></div>

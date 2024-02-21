@@ -1,0 +1,333 @@
+.user_info_box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    .product_info_container {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(grey, 0.7);
+        width: 100%;
+        height: 100%;
+        background-color: unset;
+        z-index: 10;
+    
+        .product_info_background {
+            background-color: rgba(8, 2, 2, 0.3);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 15;
+        }
+    
+        .product_info_content {
+            position: absolute;
+            bottom: 20%;
+            left: 30%;
+            width: 35%;
+            height: 520px;
+            background-color: rgba(255, 255, 255, 1);
+            z-index: 20;
+            border-radius: 10px;
+            padding: 10px;
+            overflow: auto;
+        }
+    }
+    .item_container_title{
+        display: flex !important;
+        gap: 30px;
+        align-items: center;
+        // justify-content: center;
+        img{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        :nth-child(2) {
+            max-width: 30%;  
+        }
+        :nth-child(3) {
+            margin-left: 90px;
+        }
+        :nth-child(4) {
+            margin-left: 5px;
+        }
+    }
+    .item_container {
+        display: flex !important;
+        gap: 30px;
+        align-items: center;
+        // justify-content: center;
+        img{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        p{
+            margin: 0;
+        }
+        :nth-child(2) {
+            max-width: 40%;
+            margin-left: 15px;
+        }
+    
+    }
+    .product_describe_form {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(grey, 0.7);
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    
+        form {
+            padding: 10px;
+            width: 450px;
+            height: 250px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 2px 2px 2px 2px rgb(102, 101, 101);
+            position: relative;
+    
+            textarea {
+                height: 100px;
+            }
+    
+            .btn_box {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 10px;
+    
+                span {
+                    font-family: $fontKanit;
+                    font-size: $l;
+                }
+            }
+    
+            .btn-success {
+                position: absolute;
+                bottom: 10px;
+                right: 10px;
+            }
+    
+            .input_avatar {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+    
+                img {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                    cursor: pointer;
+                }
+    
+                span {
+                    position: absolute;
+                    z-index: 1;
+                    color: white;
+                    font-weight: 900;
+                    font-size: $l * 2;
+                    text-shadow: 2px 2px 2px black;
+                }
+    
+                input {
+                    position: absolute;
+                    opacity: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 2;
+                    top: 0;
+                    left: 0;
+                    cursor: pointer;
+                }
+            }
+    
+        }
+    }
+    
+    .product_detail_form {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(grey, 0.7);
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    
+        .form_container {
+            padding: 10px;
+            width: 700px;
+            height: 700px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 2px 2px 2px 2px rgb(102, 101, 101);
+            position: relative;
+    
+            .btn_box {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+    
+                span {
+                    font-family: $fontKanit;
+                    font-size: $l;
+                }
+            }
+    
+            form {
+                width: 680px;
+                height: 550px;
+                overflow: auto;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                margin-left: 10px;
+    
+    
+                h4 {
+                    font-size: 20px;
+                    margin-bottom: 20px;
+                }
+    
+                .btn-success {
+                    position: fixed;
+                    bottom: 14%;
+                    right: 62%;
+                    padding: 10px 30px;
+                    font-size: 20px;
+                }
+    
+                .input_avatar {
+                    width: 100px;
+                    height: 100px;
+                    border-radius: 50%;
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+    
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+                        cursor: pointer;
+                    }
+    
+                    span {
+                        position: absolute;
+                        z-index: 1;
+                        color: white;
+                        font-weight: 900;
+                        font-size: $l * 2;
+                        text-shadow: 2px 2px 2px black;
+                    }
+    
+                    input {
+                        position: absolute;
+                        opacity: 0;
+                        width: 100%;
+                        height: 100%;
+                        z-index: 2;
+                        top: 0;
+                        left: 0;
+                        cursor: pointer;
+                    }
+                }
+    
+                .pictures {
+                    display: flex;
+                    flex-wrap: wrap;
+    
+                    .item {
+                        width: 75px;
+                        height: 75px;
+                        border-radius: 50%;
+                        margin: 0 10px 10px 0;
+                        position: relative;
+    
+                        img {
+                            width: 100%;
+                            height: 100%;
+                        }
+    
+                        .btn-danger {
+                            border-radius: 5px;
+                            position: absolute;
+                            
+                            
+                            padding: 0;
+                            
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    .table_container {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(grey, 0.7);
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        
+        .table_content {
+            width: 60%;
+            background-color: #fff;
+            padding: 10px;
+    
+            Table {
+                width: 100%;
+            }
+    
+            .btn_box {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+                background-color: #fff;
+    
+                span {
+                    font-family: $fontKanit;
+                    font-size: $l;
+                    margin-right: 50px;
+                }
+            }
+        }
+        .table_receipt{
+            width: 90%;
+        }
+    
+    }
+}
+

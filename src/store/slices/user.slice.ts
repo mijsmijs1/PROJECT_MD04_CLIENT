@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 type AvailableStatus = "active" | "inactive"
-
+type addModal = true | false
 export type course_access = {
     id: number;
     userId: number;
@@ -34,17 +34,19 @@ export type user = {
     firstName: string;
     lastName: string;
     birthday: string;
-    courses:course_access[];
+    courses: course_access[];
     logs: log[];
 }
 interface InitState {
     data: user | null,
-
+    userProduct: user | null,
+    addModal: addModal
 
 }
 let initialState: InitState = {
     data: null,
-
+    userProduct: null,
+    addModal: false
 }
 const userSlice = createSlice({
     name: "user",
@@ -53,6 +55,12 @@ const userSlice = createSlice({
         setData: (state, action) => {
             state.data = action.payload;
         },
+        setUserProduct: (state, action) => {
+            state.userProduct = action.payload;
+        },
+        loadModal: (state) => {
+            state.addModal = !state.addModal
+        }
     }
 })
 export const userReducer = userSlice.reducer;

@@ -5,6 +5,7 @@
     align-items: center;
     flex-direction: column;
     border-bottom: 1.5px solid $superColor;
+    background-color: #fff;
 
     .nav_top {
         max-width: 1440px;
@@ -66,6 +67,7 @@
                     margin-top: 5px;
                     margin-right: 5PX;
                     cursor: pointer;
+
                     &:hover {
                         color: $orangeColor;
                     }
@@ -114,20 +116,123 @@
                     cursor: pointer;
                     margin-left: 20px;
                 }
-                .category{
+
+                .category {
                     display: flex;
                     margin-top: 10px;
                     margin-left: 10%;
+                    position: relative;
+                    transition: all 0.2s;
+
+                    &:hover {
+
+                        color: #E03E61;
+
+                        .sup_menu {
+                            display: block;
+                            z-index: 1000;
+                        }
+                    }
+
                     cursor: pointer;
-                    ion-icon{
+
+                    ion-icon {
                         margin-right: 5px;
                         margin-top: 5px;
                     }
-                    p{
+
+                    p {
                         margin-bottom: 0px;
                         margin-right: 5px;
                         font-size: 17px;
                     }
+
+
+
+
+                    .sup_menu {
+                        display: none;
+                        position: absolute;
+                        width: 170px;
+                        min-height: 150px;
+                        background-color: $primaryColor;
+                        left: 0;
+                        bottom: -15px;
+                        transform: translateY(100%);
+                        border: 2px solid $greenColor;
+
+                        &::before {
+                            display: block;
+                            content: "";
+                            width: 100%;
+                            height: 60px;
+                            background-color: transparent;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            transform: translateY(-100%);
+
+                            &:hover {
+                                .sup {
+                                    color: #E03E61;
+                                }
+
+                                .sup_menu {
+                                    display: block;
+                                }
+                            }
+                        }
+
+                        .child_box {
+                            position: absolute;
+                                width: 170px;
+                                min-height: 150px;
+                                background-color: $primaryColor;
+                                right: -170px;
+                                top: -152px;
+                                transform: translateY(100%);
+                                border: 2px solid $greenColor;
+                            .sup_menu_item_child {
+                                
+                                height: 40px;
+                                display: flex;
+                                justify-content: flex-start;
+                                align-items: center;
+                                color: $secondaryColor;
+                                transition: all 0.2s;
+                                padding: 10px;
+
+                                &:hover {
+                                    background-color: $blueColor;
+                                    color: black;
+                                }
+                            }
+                        }
+
+
+                        .sup_menu_item {
+                            height: 40px;
+                            display: flex;
+                            justify-content: flex-start;
+                            align-items: center;
+                            color: $secondaryColor;
+                            transition: all 0.2s;
+                            padding: 10px;
+
+                            &:hover {
+                                background-color: $blueColor;
+                                color: black;
+                            }
+
+                            img {
+                                width: 20px;
+                                height: 20px;
+                                margin-right: 8px;
+                                margin-left: 0;
+                            }
+                        }
+                    }
+
                 }
             }
 
@@ -162,7 +267,7 @@
                             display: flex;
                             align-items: center;
                             margin-bottom: 5px;
-
+                            flex-direction: column;
                             :hover {
                                 cursor: pointer;
                             }
@@ -177,7 +282,11 @@
                             ;
 
                             span {
-                                width: 85%;
+                                width: 100%;
+                                margin-bottom: 5px;
+                                &:hover{
+                                    color: $orangeColor;
+                                }
                             }
                         }
                     }
@@ -219,13 +328,43 @@
 
                 .wallet_box {
                     position: relative;
+
                     span {
                         margin-right: 10px;
                     }
-                    ion-icon{
+
+                    ion-icon {
                         position: absolute;
                         top: 10px;
                         left: 12px;
+                    }
+                }
+                .cart_box{
+                    margin-right: 10px;
+                    cursor: pointer;
+                }.cart_box {
+                    display: flex;
+                    font-size: 33px;
+                    justify-content: center;
+                    align-items: center;
+                    position: relative;
+                    margin-right: 25px;
+                    cursor: pointer;
+                    .cart_icon {
+                        ion-icon {
+                            font-size: 35px;
+                            cursor: pointer;
+                        }
+                        i{
+                            font-size: 35px; 
+                        }
+                    }
+                    span{
+                        font-size: 13px;
+                        position: absolute;
+                        top: -14px;
+                        right: -19px;
+                        color: #E03E61;
                     }
                 }
             }
@@ -355,11 +494,11 @@
             color: #FF5722;
         }
     }
-
+    
     .dropdown-menu {
         width: 50%;
         left: 50%;
-        transform: translate(1%, 65%) !important;
+        transform: translate(1%, 45%) !important;
     }
 }
 
@@ -457,40 +596,41 @@
         background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
     }
 }
+
 .cta {
     border: none;
     background: none;
     cursor: pointer;
-  }
-  
-  .cta span {
+}
+
+.cta span {
     padding-bottom: 7px;
     letter-spacing: 4px;
     font-size: 14px;
     padding-right: 15px;
     text-transform: uppercase;
-  }
-  
-  .cta svg {
+}
+
+.cta svg {
     transform: translateX(-8px);
     transition: all 0.3s ease;
-  }
-  
-  .cta:hover svg {
+}
+
+.cta:hover svg {
     transform: translateX(0);
-  }
-  
-  .cta:active svg {
+}
+
+.cta:active svg {
     transform: scale(0.9);
-  }
-  
-  .hover-underline-animation {
+}
+
+.hover-underline-animation {
     position: relative;
     color: black;
     padding-bottom: 20px;
-  }
-  
-  .hover-underline-animation:after {
+}
+
+.hover-underline-animation:after {
     content: "";
     position: absolute;
     width: 100%;
@@ -501,13 +641,14 @@
     background-color: $orangeColor;
     transform-origin: bottom right;
     transition: transform 0.25s ease-out;
-  }
-  
-  .cta:hover .hover-underline-animation:after {
+}
+
+.cta:hover .hover-underline-animation:after {
     transform: scaleX(1);
     transform-origin: bottom left;
-  }
-  .button_up {
+}
+
+.button_up {
     display: inline-block;
     padding: 6px 15px;
     margin-left: 20px;
@@ -522,9 +663,9 @@
     z-index: 1;
     background-color: $primaryColor;
     width: 150px;
-  }
-  
-  .button_up:before {
+}
+
+.button_up:before {
     content: "";
     position: absolute;
     left: 50%;
@@ -537,9 +678,9 @@
     display: block;
     transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
     z-index: -1;
-  }
-  
-  .button_up:after {
+}
+
+.button_up:after {
     content: "";
     position: absolute;
     left: 55%;
@@ -552,22 +693,21 @@
     display: block;
     transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
     z-index: -1;
-  }
-  
-  .button_up:hover {
+}
+
+.button_up:hover {
     color: #ffffff;
     border: 1px solid #39bda7;
-  }
-  
-  .button_up:hover:before {
+}
+
+.button_up:hover:before {
     top: -35%;
-    background-color: #39bda7;
+    background-color: $greenColor;
     transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
-  }
-  
-  .button_up:hover:after {
+}
+
+.button_up:hover:after {
     top: -45%;
-    background-color: #39bda7;
+    background-color: $greenColor;
     transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
-  }
-  
+}

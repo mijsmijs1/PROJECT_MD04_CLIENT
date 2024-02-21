@@ -1,6 +1,13 @@
 import authenApi from './authen'
 import categoryApi from './category'
+import productApi from "./product"
+import memberApi from "./member"
+import receiptApi from './receipt'
+import './axios.instance'
 export const api = {
     authen: authenApi,
-    category: categoryApi
+    category: categoryApi,
+    product: productApi,
+    member: memberApi,
+    receipt:receiptApi
 }

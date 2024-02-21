@@ -77,7 +77,7 @@ export const Carousel = () => {
       <div className='carousel_app'>
         <div
           className="carousel"
-          style={{ width: '100%', height: '640px' }}
+          style={{ width: '80%', height: '640px' }}
           onMouseEnter={handleHover}
           onMouseLeave={handleHover}
         >
