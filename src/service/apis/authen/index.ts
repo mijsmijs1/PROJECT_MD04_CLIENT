@@ -4,6 +4,9 @@ export default {
     login: async (loginData: any) => {
         return await axios.post(`${import.meta.env.VITE_SV_API_URL}/${prefix}/login`, loginData)
     },
+    update: async (userId: number, data) => {
+        return await axios.patch(`${import.meta.env.VITE_SV_API_URL}/${prefix}/${userId}`, data)
+    },
     create: async (user: any) => {
         return await axios.post(`${import.meta.env.VITE_SV_API_URL}/${prefix}/register`, user)
     },

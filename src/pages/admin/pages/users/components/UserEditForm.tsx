@@ -1,15 +1,20 @@
 import { randomId } from '@mieuteacher/meomeojs';
 import React, { useState } from 'react'
 import { InputGroup, Form } from 'react-bootstrap';
-import { userAction } from '@slices/user.slice';
-import { uploadToFirebase } from '@services/firebase'
-import api from '@services/apis'
+
+
+
 import { Modal } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
+import { Store } from '@/store';
+import { api } from '@/service/apis';
+import { userAction } from '@/store/slices/user.slice';
+import { uploadToFirebase } from '@/service/firebase';
+
 export default function UserEditForm({ showEdit, setShowEdit, updateData }) {
     const dispatch = useDispatch();
     console.log('updateData', updateData);
-    const userStore = useSelector(store => store.userStore)
+    const userStore = useSelector((store: Store) => store.userStore)
     async function handleEditUser(e) {
         e.preventDefault();
         try {
@@ -17,26 +22,17 @@ export default function UserEditForm({ showEdit, setShowEdit, updateData }) {
             if (!e.target.avatar.files[0]) {
                 avatar = updateData.avatar;
             } else {
-                avatar = await uploadToFirebase(e.target.avatar.files[0])
+                avatar = await uploadToFirebase(e.target.avatar.files[0],"https://t3.ftcdn.net/jpg/05/00/54/28/360_F_500542898_LpYSy4RGAi95aDim3TLtSgCNUxNlOlcM.jpg")
             }
             let editUser = {}
-            if (updateData.role == "admin" || updateData.role == "member") {
+
                 editUser = {
                     userName: e.target.userName.value,
                     email: e.target.email.value,
                     avatar,
-                    role: e.target.role.value,
                     status: Boolean(e.target.status.value),
-                    emailConfirm: Boolean(e.target.emailConfirm.value)
+                    emailConfirm: e.target.emailConfirm.value
                 }
-            } else {
-                editUser = {
-                    userName: e.target.userName.value,
-                    email: e.target.email.value,
-                    avatar,
-                    role: "master"
-                }
-            }
 
             console.log(editUser);
             let result = await api.authen.update(updateData.id, {
@@ -47,13 +43,13 @@ export default function UserEditForm({ showEdit, setShowEdit, updateData }) {
                 title: "Notication",
                 content: "Bạn đã edit user thành công!",
                 onOk: () => {
-                    dispatch(userAction.update(result.data.data))
-                    e.target.userName.value = ""
-                    e.target.email.value = ""
-                    e.target.status.value = null
-                    e.target.role.value = null
-                    e.target.avatar.value = null
-                    e.target.emailConfirm.value = null
+                    dispatch(userAction.update(result.data.data));
+                    // (e.target as any).userName.value = ""
+                    // (e.target as any).email.value = ""
+                    // (e.target as any).status.value = null
+                    // (e.target as any).role.value = null
+                    // (e.target as any).avatar.value = null
+                    // (e.target as any).emailConfirm.value = null
                     setShowEdit(!showEdit)
                 }
             })
@@ -90,7 +86,7 @@ export default function UserEditForm({ showEdit, setShowEdit, updateData }) {
                     />
                 </InputGroup>
 
-                {
+                {/* {
                     !(updateData.role == "master") && <InputGroup className="mb-3">
                         <InputGroup.Text style={{ width: "100px" }} id="basic-addon1">Role</InputGroup.Text>
                         <Form.Select name='role' aria-label="Default select example" >
@@ -99,7 +95,7 @@ export default function UserEditForm({ showEdit, setShowEdit, updateData }) {
                             <option key={randomId()} value="member">Member</option>
                         </Form.Select>
                     </InputGroup>
-                }
+                } */}
 
                 <InputGroup className="mb-3">
                     <InputGroup.Text style={{ width: "80px" }} id="basic-addon1">Avatar</InputGroup.Text>
@@ -109,7 +105,7 @@ export default function UserEditForm({ showEdit, setShowEdit, updateData }) {
                             if (e.target.files.length > 0) {
                                 let spanEl = e.target.parentNode.querySelector('span');
                                 let imgEl = e.target.parentNode.querySelector('img');
-                                spanEl.style.opacity = 0;
+                                (spanEl as any).style.opacity = 0;
                                 imgEl.src = URL.createObjectURL(e.target.files[0])
                             }
                         }} name='avatar' type="file" />
@@ -131,8 +127,8 @@ export default function UserEditForm({ showEdit, setShowEdit, updateData }) {
                         <InputGroup.Text style={{ width: "100px" }} id="basic-addon1">Email Confirm</InputGroup.Text>
                         <Form.Select name='emailConfirm' aria-label="Default select example">
                             <option value={updateData.emailConfirm}>{updateData.emailConfirm ? "Active" : "Inactive"}</option>
-                            <option key={randomId()} value={true}>Active</option>
-                            <option key={randomId()} value={false}>Inactive</option>
+                            <option key={randomId()} value="active">Active</option>
+                            <option key={randomId()} value="inactive">Inactive</option>
                         </Form.Select>
                     </InputGroup>
                 }

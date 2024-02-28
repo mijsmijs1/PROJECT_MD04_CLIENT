@@ -2,20 +2,22 @@ import React, { useState, useEffect } from 'react'
 // import { Table } from 'react-bootstrap';
 // import { Modal } from 'antd'
 import { Table, Modal, Button } from 'react-bootstrap';
-import api from '@services/apis'
+
 import { randomId, convertToVND } from '@mieuteacher/meomeojs';
 import { useSelector, useDispatch } from 'react-redux';
 import UserCreateForm from './components/UserCreateForm';
-import { userAction } from '@slices/user.slice';
+
 import { receiptAction } from '../../../../store/slices/receipt.slice';
 import UserEditForm from './components/UserEditForm';
+import { Store } from '@/store';
+import { api } from '@/service/apis';
+import { userAction } from '@/store/slices/user.slice';
 export default function Recycle() {
-    const dispatch = useDispatch()
-    const userStore = useSelector(store => store.userStore);
-    console.log('userStore', userStore);
-    const receiptStore = useSelector(store => store.receiptStore);
+    const dispatch = useDispatch();
+    const userStore = useSelector((store: Store) => store.userStore)
+    const receiptStore = useSelector((store: Store) => store.receiptStore)
     const [showAddress, setShowAddress] = useState(false);
-    const [updateData, setupdateData] = useState({});
+    const [updateData, setupdateData] = useState(null);
     const [showIp, setShowIp] = useState(false);
     const [showReceipt, setShowReceipt] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
@@ -58,7 +60,7 @@ export default function Recycle() {
         try {
             api.authen.findMany()
                 .then(async (res) => {
-                    dispatch(userAction.setList(res.data.data))
+                    dispatch(userAction.setList(Object.values(res.data.data)))
                 })
                 .catch(err => {
                     console.log(err);
@@ -66,23 +68,15 @@ export default function Recycle() {
         } catch (err) {
             console.log(err);
         }
-        if (userStore.data.role == "master") {
-            users = userStore.list
-        } else {
-            users = userStore.list.filter(item => item.role != "master")
-        }
+        
         console.log("da vao effect");
     }, [getUser])
-    if (userStore.data.role == "master") {
-        users = userStore.list
-    } else {
-        users = userStore.list.filter(item => item.role != "master")
-    }
+    
     return (
         <>
-            {
+            {/* {
                 userStore.addModal && <UserCreateForm dispatch={dispatch} />
-            }
+            } */}
             {
                 showEdit && <UserEditForm showEdit={showEdit} setShowEdit={setShowEdit} updateData={updateData} />
             }
@@ -95,7 +89,7 @@ export default function Recycle() {
                         <th>Email</th>
                         <th>Create At</th>
                         <th>Update At</th>
-                        <th>Role</th>
+                       
                         <th>Address</th>
                         <th>Ip list</th>
                         <th>Receipts</th>
@@ -104,7 +98,7 @@ export default function Recycle() {
                 </thead>
                 <tbody>
                     {
-                        users.map((item, index) => {
+                        userStore.list?.map((item, index) => {
                             if (!item.status) {
                                 return (
                                     <tr key={randomId()}>
@@ -113,7 +107,7 @@ export default function Recycle() {
                                         <td >{item.email}</td>
                                         <td >{item.createAt ? (new Date(Number(item.createAt))).toLocaleString('en-GB', options) : "null"}</td>
                                         <td >{item.updateAt ? (new Date(Number(item.updateAt))).toLocaleString('en-GB', options) : "null"}</td>
-                                        <td >{item.role}</td>
+                                        {/* <td >{item.role}</td> */}
                                         <td ><button
                                             onClick={() => {
                                                 setShowAddress(!showAddress)

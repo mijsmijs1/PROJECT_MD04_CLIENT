@@ -24,7 +24,7 @@ export type user = {
     avatar: string;
     email: string;
     emailConfirm: AvailableStatus;
-    phoneNNumber: string;
+    phoneNumber: string;
     phoneConfirm: AvailableStatus;
     wallet: number;
     status: boolean;
@@ -40,13 +40,15 @@ export type user = {
 interface InitState {
     data: user | null,
     userProduct: user | null,
-    addModal: addModal
+    addModal: addModal,
+    list :user[]
 
 }
 let initialState: InitState = {
     data: null,
     userProduct: null,
-    addModal: false
+    addModal: false,
+    list:[]
 }
 const userSlice = createSlice({
     name: "user",
@@ -60,6 +62,20 @@ const userSlice = createSlice({
         },
         loadModal: (state) => {
             state.addModal = !state.addModal
+        },
+        addData: (state, action) => {
+            state.list.unshift(action.payload)
+        },
+        update: (state, action) => {
+            state.list = state.list.map(item => {
+                if (item.id == action.payload.id) {
+                    return action.payload
+                } else {
+                    return item
+                }
+            })
+        },setList: (state, action) => {
+            state.list = action.payload
         }
     }
 })

@@ -32,6 +32,8 @@ export default function Home() {
                 tokenMember: String(localStorage.getItem("tokenMember"))
             }
         }))
+
+
     }, [])
     useEffect(()=>{
         if(!localStorage.getItem("tokenMember")){

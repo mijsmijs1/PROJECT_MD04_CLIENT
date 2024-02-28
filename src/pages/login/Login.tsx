@@ -55,7 +55,7 @@ const Login = ({ setModalVisible }) => {
       setLoad(false)
       Modal.error({
         title: "Lỗi",
-        content: err.response?.data?.message || "Lỗi không rõ!"
+        content: err.response?.data?.message.join(" ") || "Lỗi không rõ!"
       })
     }
   };
@@ -70,6 +70,7 @@ const Login = ({ setModalVisible }) => {
           content: "Vui lòng nhập đầy đủ thông tin đăng nhập!",
           onOk: () => { }
         })
+        return
       }
 
 
@@ -109,6 +110,7 @@ const Login = ({ setModalVisible }) => {
   };
   async function handleLoginWithSosial(result, name) {
     try {
+      setLoad(true)
       let data = {
         googleToken: result?.user?.accessToken,
         user: {
@@ -121,6 +123,7 @@ const Login = ({ setModalVisible }) => {
       let resultApi = await api.authen.loginWithGoogle(data);
       if (resultApi.status == 200) {
         localStorage.setItem("token", resultApi.data.token)
+        setLoad(false)
         Modal.success({
           title: "Notication",
           content: `Đăng nhập với ${name} thành công!`,
@@ -131,6 +134,7 @@ const Login = ({ setModalVisible }) => {
       }
     } catch (err) {
       console.log('err', err);
+      setLoad(false)
       Modal.error({
         title: 'Error',
         content: err.response ? err.response.data.message : "Loi khong xac dinh"
@@ -173,6 +177,7 @@ const Login = ({ setModalVisible }) => {
               <span>Sign up with Apple</span>
             </div>
             <div className="google-login-button" onClick={async () => {
+              setLoad(true)
               let result = await loginWithGoogle();
               reauthenticate();
               handleLoginWithSosial(result, "Google")
@@ -213,6 +218,7 @@ const Login = ({ setModalVisible }) => {
                 />
               </svg>
               <span>Sign up with Google</span>
+              {load && <BtnLoading />}
             </div>
           </div>
         </div>}
@@ -249,7 +255,8 @@ const Login = ({ setModalVisible }) => {
               </svg>
               <span>Sign up with Apple</span>
             </div>
-            <div className="google-login-button" onClick={async () => {
+            <button className="google-login-button" onClick={async () => {
+              setLoad(true)
               let result = await loginWithGoogle();
               reauthenticate();
               handleLoginWithSosial(result, "Google")
@@ -290,7 +297,8 @@ const Login = ({ setModalVisible }) => {
                 />
               </svg>
               <span>Sign up with Google</span>
-            </div>
+              {load && <BtnLoading />}
+            </button>
           </div>
         </div>}
 

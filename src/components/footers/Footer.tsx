@@ -1,68 +1,97 @@
 import React from 'react'
 import './footer.scss'
+import { useTranslation } from 'react-i18next';
+
 export default function Footer() {
+  const { t } = useTranslation();
   return (
     <footer>
-      <div className="footer">
+    <div className="footer">
       <div className='footer_content'>
         <div>
-          <p>Hỗ trợ Khách hàng</p>
+          <p>{t('footer.Customersupport')}</p>
           <ul>
-            {["Thẻ ưu đãi", "Hướng dẫn mua online", "Ưu đãi dành cho Doanh nghiệp", "Chính sách trả góp", "Dịch vụ sửa chữa"].map(item => (
-              <li key={Date.now() * Math.random()}>
-                <a>{item}</a>
-              </li>
-            ))}
+            <li>
+              <a>{t('footer.DiscountCards')}</a>
+            </li>
+            <li>
+              <a>{t('footer.OnlineShoppingGuide')}</a>
+            </li>
+            <li>
+              <a>{t('footer.BusinessOffers')}</a>
+            </li>
+            <li>
+              <a>{t('footer.InstallmentPolicy')}</a>
+            </li>
+            <li>
+              <a>{t('footer.RepairServices')}</a>
+            </li>
           </ul>
         </div>
         <div>
-          <p>Chính sách mua hàng</p>
+          <p>{t('footer.PurchasePolicy')}</p>
           <ul>
-            {["Điều kiện giao dịch chung", "Chính sách bảo hành", "Chính sách đổi trả", "Chính sách thanh toán", "Giao hàng và Lắp đặt tại nhà", "Dịch vụ lắp đặt và nâng cấp PC/ Laptop tại cửa hàng & TTBH"].map(item => (
-              <li key={Date.now() * Math.random()}>
-                <a>{item}</a>
-              </li>
-            ))}
+            <li>
+              <a>{t('footer.PurchasePolicy')}</a>
+            </li>
+            <li>
+              <a>{t('footer.WarrantyPolicy')}</a>
+            </li>
+            <li>
+              <a>{t('footer.ReturnPolicy')}</a>
+            </li>
+            <li>
+              <a>{t('footer.PaymentPolicy')}</a>
+            </li>
+            <li>
+              <a>{t('footer.HomeDeliveryAndInstallation')}</a>
+            </li>
+            <li>
+              <a>{t('footer.PCAndLaptopInstallationAndUpgradeServices')}</a>
+            </li>
           </ul>
         </div>
         <div>
-          <p>Thông tin Phú Quý</p>
+          <p>{t('footer.AboutPhuQuy')}</p>
           <ul>
-            {["Giới thiệu Phú Quý", "Hệ thống cửa hàng", "Trung tâm bảo hành", "Chính sách bảo mật", "Tin công nghệ"].map(item => (
-              <li key={Date.now() * Math.random()}>
-                <a>{item}</a>
-              </li>
-            ))}
+            <li>
+              <a>{t('footer.AboutPhuQuy')}</a>
+            </li>
+            <li>
+              <a>{t('footer.StoreLocations')}</a>
+            </li>
+            <li>
+              <a>{t('footer.ServiceCenter')}</a>
+            </li>
+            <li>
+              <a>{t('footer.PrivacyPolicy')}</a>
+            </li>
+            <li>
+              <a>{t('footer.TechnologyNews')}</a>
+            </li>
           </ul>
         </div>
         <div>
-          <p>Cộng đồng Phú Quý</p>
+          <p>{t('footer.CommunityPhuQuy')}</p>
           <ul>
-            <li>Gọi mua hàng (miễn phí) <a href="tel:18006867">18006867</a></li>
-            <li>Gọi chăm sóc   <a href="tel:18006867">18006867</a></li>
-            <li><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1200px-Facebook_Logo_%282019%29.png' /> Facebook Phú Quý</li>
-            <li><img src='https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png?20220706172052' /> Phú Quý Media</li>
-            <li><img src='https://cdn.haitrieu.com/wp-content/uploads/2022/01/Logo-Zalo-Arc.png' /> Zalo Phú Quý</li>
-          </ul>
-        </div>
-        <div>
-          <p>Email liên hệ</p>
-          <ul>
-            {["Hỗ trợ Khách hàng:", "Liên hệ báo giá:", "Hợp tác phát triển:"].map(item => (
-              <li key={Date.now() * Math.random()}>
-                <h6>{item}</h6><a href='fabook.com'>nguyphuquy1@gmail.com</a>
-              </li>
-            ))}
+            <li>{t('footer.CallToPurchase')} <a href="tel:18006867">18006867</a></li>
+            <li>{t('footer.CustomerCare')} <a href="tel:18006867">18006867</a></li>
+            <li>{t('footer.FacebookPhuQuy')} <a href="https://www.facebook.com/phuquy.com.vn" target="_blank" rel="noopener noreferrer">facebook.com/phuquy.com.vn</a></li>
+            <li>{t('footer.PhuQuyMedia')} <a href="https://media.phuquy.com.vn" target="_blank" rel="noopener noreferrer">media.phuquy.com.vn</a></li>
+            <li>{t('footer.ZaloPhuQuy')} <a href="https://zalo.me/18006867" target="_blank" rel="noopener noreferrer">zalo.me/18006867</a></li>
+            <li>{t('footer.CustomerSupportEmail')} <a href="mailto:hotro@phuquy.com.vn">hotro@phuquy.com.vn</a></li>
+            <li>{t('footer.QuoteInquiryContact')} <a href="mailto:dautu@phuquy.com.vn">dautu@phuquy.com.vn</a></li>
+            <li>{t('footer.DevelopmentCooperation')}</li>
           </ul>
         </div>
       </div>
       <div className='footer_info'>
         <div>
-          <p>Danh sách các ngân hàng thanh toán online:</p>
+          <p>{t('footer.ListOfOnlinePaymentBanks')}:</p>
           <img src='https://shopfront-cdn.tekoapis.com/static/vnpay_banks.png' />
         </div>
       </div>
-      </div>
-    </footer>
+    </div>
+  </footer>
   )
 }

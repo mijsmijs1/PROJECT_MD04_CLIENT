@@ -18,7 +18,9 @@ export default function Navbar({ menuState, setMenuState, data, socket, setSocke
   return (
     <nav>
       <div className='logo'>
-        <img src='../../../public/img/logoRaoVat.jpg' />
+        <img src='../../../public/img/logoRaoVat.jpg' style={{cursor:"pointer"}} onClick={()=>{
+          window.location.href = "/"
+        }}/>
         <MenuBtn onClickFn={setMenuState} open={menuState} />
       </div>
 

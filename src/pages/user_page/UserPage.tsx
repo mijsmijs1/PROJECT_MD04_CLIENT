@@ -42,6 +42,40 @@ export default function UserPage() {
   const [showEdit, setShowEdit] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [detail, setDetail] = useState(null)
+  const [displayPic, setDisplayPic] = useState(false);
+  const [displayVideo, setDisplayVideo] = useState(false);
+  const [images, setImages] = useState([])
+  const [video, setVideo] = useState(null)
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [timer, setTimer] = useState(null);
+  const goToNextSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
+  };
+
+  const goToPrevSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
+  };
+
+  const handleHover = () => {
+    setIsHovered((prevState) => !prevState);
+  };
+
+  useEffect(() => {
+    if (!isHovered) {
+      setTimer(
+        setInterval(() => {
+          goToNextSlide();
+        }, 3000)
+      );
+    } else {
+      clearInterval(timer);
+    }
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [isHovered]);
   return (
     <div className='user_info_box'>
       {/* {
@@ -199,6 +233,69 @@ export default function UserPage() {
           </div>
         </div>
       }
+      {
+        displayPic && <div className='product_describe_form'>
+          <div className='carousel_box'>
+            <button onClick={() => {
+              setDisplayPic(!displayPic)
+            }} type='button' className='btn btn-danger'>X</button>
+            <div className='carousel_app'>
+              <div
+                className="carousel"
+                style={{ width: '80%', height: '640px' }}
+                onMouseEnter={handleHover}
+                onMouseLeave={handleHover}
+              >
+                <img src={`${import.meta.env.VITE_SV_HOST}/${images[currentIndex]}`} alt="carousel slide" />
+
+                {isHovered && (
+                  <div className="navigation">
+                    <button type="button" className="btn " onClick={goToPrevSlide}><ion-icon name="chevron-back-outline"></ion-icon></button>
+                    <button type="button" className="btn " onClick={goToNextSlide}><ion-icon name="chevron-forward-outline"></ion-icon></button>
+                  </div>
+                )}
+
+                <div className="mydots">
+                  {images.map((image, index) => (
+                    <span
+                      key={index}
+                      className={index === currentIndex ? 'active' : ''}
+                      onClick={() => setCurrentIndex(index)}
+                    ></span>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      }
+      {
+        displayVideo && <div className='product_describe_form'>
+          <div className='carousel_box'>
+            <button onClick={() => {
+              setDisplayVideo(!displayVideo)
+            }} type='button' className='btn btn-danger close'>X</button>
+            <div className='carousel_app'>
+
+              <video
+                id="videoPlayer"
+                height="90%"
+                width="100%"
+                controls autoPlay={false}
+              >
+                <source
+                  src={`${import.meta.env.VITE_SV_API_URL}/product/video/streaming/?code=${video}`}
+                  type="video/mp4"
+                />
+              </video>
+
+            </div>
+
+          </div>
+        </div>
+      }
       {/* {
                 showDetail && <DetailShow showDetail={showDetail} setShowDetail={setShowDetail} updateData={updateData} setupdateData={setupdateData} />
             }
@@ -216,6 +313,7 @@ export default function UserPage() {
               {/* <th>Category</th>
                         <th>Brand</th> */}
               <th>Price</th>
+              <th>Status</th>
               <th>Des</th>
               <th>Detail</th>
               <th>Tools</th>
@@ -233,6 +331,10 @@ export default function UserPage() {
                       </td>
                       <td >{product.name}</td>
                       <td>{convertToVND(product.price)}</td>
+                      <td>{product.priorityStatus == "active" ? <span className='priority_logo_vip'>
+                        <i className="fa-regular fa-circle-up"></i>
+                        <span>ƯU TIÊN</span>
+                      </span> : <span>TIN THƯỜNG</span>}</td>
                       <td>
                         <button
                           onClick={() => {
@@ -320,8 +422,11 @@ export default function UserPage() {
               {/* <th>Category</th>
                         <th>Brand</th> */}
               <th>Price</th>
+              <th>Status</th>
               <th>Des</th>
               <th>Detail</th>
+              <th>Pic</th>
+              <th>Video</th>
               <th>Tools</th>
             </tr>
           </thead>
@@ -332,11 +437,14 @@ export default function UserPage() {
                   return (
                     <tr key={randomId()}>
                       <td>{index + 1}</td>
-                      <td>
-                        <img src={`${import.meta.env.VITE_SV_HOST}/${product.avatar}`} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
-                      </td>
+                      <td >
+                        <img src={`${import.meta.env.VITE_SV_HOST}/${product.avatar}`} style={{ width: "50px", height: "50px", borderRadius: "50%", position: "relative" }} ></img>                      </td>
                       <td >{product.name}</td>
                       <td>{convertToVND(product.price)}</td>
+                      <td>{product.priorityStatus == "active" ? <span className='priority_logo_vip'>
+                        <i className="fa-regular fa-circle-up"></i>
+                        <span>ƯU TIÊN</span>
+                      </span> : <span>TIN THƯỜNG</span>}</td>
                       <td>
                         <button
                           onClick={() => {
@@ -354,6 +462,28 @@ export default function UserPage() {
                             setDetail(JSON.parse(product.detail))
                           }}
                           className='btn btn-primary'>More</button>
+                      </td>
+                      <td>
+                        <button
+                          className='btn btn-primary'
+                          onClick={() => {
+                            setDisplayPic(true)
+                            setImages(product.imgs?.map(item => item.imgUrl))
+                          }}
+                        >
+                          More
+                        </button>
+                      </td>
+                      <td>
+                        {product.videoUrl ? <button
+                          className='btn btn-primary'
+                          onClick={() => {
+                            setDisplayVideo(true)
+                            setVideo(product.videoUrl)
+                          }}
+                        >
+                          More
+                        </button> : <span>None</span>}
                       </td>
                       <td>
                         {
@@ -401,9 +531,11 @@ export default function UserPage() {
               {/* <th>Category</th>
                         <th>Brand</th> */}
               <th>Price</th>
+              <th>Status</th>
               <th>Des</th>
               <th>Detail</th>
-              <th>Tools</th>
+              <th>Pic</th>
+              <th>Video</th>
             </tr>
           </thead>
           <tbody>
@@ -418,6 +550,10 @@ export default function UserPage() {
                       </td>
                       <td >{product.name}</td>
                       <td>{convertToVND(product.price)}</td>
+                      <td>{product.priorityStatus == "active" ? <span className='priority_logo_vip'>
+                        <i className="fa-regular fa-circle-up"></i>
+                        <span>ƯU TIÊN</span>
+                      </span> : <span>TIN THƯỜNG</span>}</td>
                       <td>
                         <button
                           onClick={() => {
@@ -437,7 +573,26 @@ export default function UserPage() {
                           className='btn btn-primary'>More</button>
                       </td>
                       <td>
-                        
+                        <button
+                          className='btn btn-primary'
+                          onClick={() => {
+                            setDisplayPic(true)
+                            setImages(product.imgs?.map(item => item.imgUrl))
+                          }}
+                        >
+                          More
+                        </button>
+                      </td>
+                      <td>
+                        {product.videoUrl ? <button
+                          className='btn btn-primary'
+                          onClick={() => {
+                            setDisplayVideo(true)
+                            setVideo(product.videoUrl)
+                          }}
+                        >
+                          More
+                        </button> : <span>None</span>}
                       </td>
                     </tr>
                   )
@@ -449,7 +604,7 @@ export default function UserPage() {
       </>
       }
 
-      {productStore.product?.find(item => item.status == "delete" && item.moderationStatus == "inactive") && <>
+      {productStore.product?.find(item => item.status == "delete") && <>
         <h4>Sản phẩm bị Rao Vặt từ chối đăng tin hoặc bị khóa</h4>
         <Table striped bordered hover>
           <thead>
@@ -460,9 +615,10 @@ export default function UserPage() {
               {/* <th>Category</th>
                         <th>Brand</th> */}
               <th>Price</th>
+              <th>Status</th>
               <th>Des</th>
               <th>Detail</th>
-              <th>Tools</th>
+
             </tr>
           </thead>
           <tbody>
@@ -477,6 +633,10 @@ export default function UserPage() {
                       </td>
                       <td >{product.name}</td>
                       <td>{convertToVND(product.price)}</td>
+                      <td>{product.priorityStatus == "active" ? <span className='priority_logo_vip'>
+                        <i className="fa-regular fa-circle-up"></i>
+                        <span>ƯU TIÊN</span>
+                      </span> : <span>TIN THƯỜNG</span>}</td>
                       <td>
                         <button
                           onClick={() => {
@@ -496,7 +656,7 @@ export default function UserPage() {
                           className='btn btn-primary'>More</button>
                       </td>
                       <td>
-                        
+
                       </td>
                     </tr>
                   )

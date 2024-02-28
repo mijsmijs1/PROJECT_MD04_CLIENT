@@ -10,6 +10,7 @@ import { api } from "@/service/apis";
 import { productAction } from "@/store/slices/product.slice";
 import { useDispatch } from "react-redux";
 import { categoryAction } from "@/store/slices/category.slice";
+import { receiptAction } from "@/store/slices/receipt.slice";
 
 
 
@@ -48,6 +49,46 @@ export default function Layout() {
     } catch (err) {
       console.log(err);
     }
+  }, [])
+  useEffect(() => {
+    // if (!localStorage.getItem("token")) return
+    try {
+      api.category.findCategory()
+        .then(async (res) => {
+          dispatch(categoryAction.setData(res.data.data))
+          console.log("categories", res.data.data)
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    } catch (err) {
+      console.log(err);
+    }
+  }, [])
+  useEffect(() => {
+    if (!localStorage.getItem('token')) return
+    try {
+      api.receipt.findMany()
+        .then(res => {
+          console.log(res);
+          
+          let cart = null;
+          let receipt = [];
+          for (let i in res.data.data) {
+            if (res.data.data[i].status == "shopping") {
+              cart = res.data.data[i]
+            } else {
+              receipt.push(res.data.data[i])
+            }
+          }
+          dispatch(receiptAction.setCart(cart))
+          dispatch(receiptAction.setReceipt(receipt))
+        })
+        .catch(err => { 
+          console.log(err);
+          
+        })
+    } catch (err) { }
   }, [])
   return (
 

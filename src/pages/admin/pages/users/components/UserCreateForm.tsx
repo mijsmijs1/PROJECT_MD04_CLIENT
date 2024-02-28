@@ -1,21 +1,25 @@
 import { randomId } from '@mieuteacher/meomeojs';
 import React, { useState } from 'react'
 import { InputGroup, Form } from 'react-bootstrap';
-import { userAction } from '@slices/user.slice';
-import { uploadToFirebase } from '@services/firebase'
-import api from '@services/apis'
+
+
+
 import { Modal } from 'antd';
 import { useSelector } from 'react-redux';
+import { Store } from '@/store';
+import { uploadToFirebase } from '@/service/firebase';
+import { api } from '@/service/apis';
+import { userAction } from '@/store/slices/user.slice';
 export default function UserCreateForm({ dispatch }) {
-  const userStore = useSelector(store => store.userStore)
+  const userStore = useSelector((store: Store) => store.userStore)
   async function handleAddUser(e) {
     e.preventDefault();
     try {
       let newUser = {
         userName: e.target.userName.value,
         email: e.target.email.value,
-        avatar: await uploadToFirebase(e.target.avatar.files[0]),
-        role: e.target.role.value,
+        password: "123456",
+        avatar: await uploadToFirebase(e.target.avatar.files[0],"https://t3.ftcdn.net/jpg/05/00/54/28/360_F_500542898_LpYSy4RGAi95aDim3TLtSgCNUxNlOlcM.jpg"),
         status: Boolean(e.target.status.value)
       }
       console.log(newUser);
@@ -28,17 +32,20 @@ export default function UserCreateForm({ dispatch }) {
         content: "Bạn đã thêm user thành công!",
         onOk: () => {
           dispatch(userAction.addData(result.data.data))
-          e.target.userName.value = ""
-          e.target.email.value = ""
-          e.target.status.value = null
-          e.target.role.value = null
-          e.target.avatar.value = null
+          // e.target.userName.value = ""
+          // e.target.email.value = ""
+          // e.target.status.value = null
+          // e.target.role.value = null
+          // e.target.avatar.value = null
           dispatch(userAction.loadModal())
         }
       })
     } catch (err) {
       console.log("err", err)
-      alert("1")
+      Modal.error({
+        title: "Lỗi",
+        content: err.response?.data?.message.join(" ") || "Lỗi không rõ!"
+      })
     }
   }
   return (
@@ -67,14 +74,14 @@ export default function UserCreateForm({ dispatch }) {
           />
         </InputGroup>
 
-        <InputGroup className="mb-3">
+        {/* <InputGroup className="mb-3">
           <InputGroup.Text style={{ width: "100px" }} id="basic-addon1">Role</InputGroup.Text>
           <Form.Select name='role' aria-label="Default select example">
             <option value={null}>Please choose</option>
             <option key={randomId()} value="admin">Admin</option>
             <option key={randomId()} value="member">Member</option>
           </Form.Select>
-        </InputGroup>
+        </InputGroup> */}
 
         <InputGroup className="mb-3">
           <InputGroup.Text style={{ width: "80px" }} id="basic-addon1">Avatar</InputGroup.Text>
@@ -84,7 +91,7 @@ export default function UserCreateForm({ dispatch }) {
               if (e.target.files.length > 0) {
                 let spanEl = e.target.parentNode.querySelector('span');
                 let imgEl = e.target.parentNode.querySelector('img');
-                spanEl.style.opacity = 0;
+                (spanEl as any).style.opacity = 0;
                 imgEl.src = URL.createObjectURL(e.target.files[0])
               }
             }} name='avatar' type="file" />

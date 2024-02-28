@@ -8,22 +8,11 @@ import { api } from '@/service/apis';
 import { Modal, message } from 'antd';
 import { convertToVND } from '@mieuteacher/meomeojs';
 import locationData from "../../../location.json"
+import { userAction } from '@/store/slices/user.slice';
 export default function Post() {
-  
-  const userStore = useSelector((store: Store) => store.userStore)
-  if (!userStore.data) {
-    Modal.warning({
-      title: "Warning!",
-      content: "Bạn chưa đăng nhập, vui lòng đăng nhập để thực hiện đăng tin!",
-      onOk: () => {
-        window.location.href = "/"
-      },
-      onCancel: () => {
-        window.location.href = "/"
-      }
-    })
 
-  }
+  const userStore = useSelector((store: Store) => store.userStore)
+
   const MAX_IMAGES = 6;
   const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10 megabytes
   const MAX_VIDEO_SIZE = 200 * 1024 * 1024; // 200 megabytes
@@ -33,6 +22,7 @@ export default function Post() {
   const videoRef = useRef(null)
   const [displayForm, setDisplayForm] = useState(false);
   const [displayAddress, setDisplayAddress] = useState(false);
+  const [displayPhone, setDisplayPhone] = useState(false);
   const dispatch = useDispatch();
   const categoryStore = useSelector((store: Store) => store.categoryStore)
   const [displayCategory, setDisplayCategory] = useState(true);
@@ -52,9 +42,25 @@ export default function Post() {
   const [priority, setPrioriry] = useState(false);
   const [displayPrioriry, setDisplayPrioriry] = useState(false);
 
-  
+
   useEffect(() => {
     setCities(locationData);
+    if (!userStore.data) {
+      Modal.warning({
+        title: "Warning!",
+        content: "Bạn chưa đăng nhập, vui lòng đăng nhập để thực hiện đăng tin!",
+        onOk: () => {
+          window.location.href = "/"
+        },
+        onCancel: () => {
+          window.location.href = "/"
+        }
+      })
+
+    }
+    if (!userStore.data.phoneNumber) {
+      setDisplayPhone(true)
+    }
   }, []);
   const handleCityChange = (e) => {
     const selectedCityName = e.target.value;
@@ -239,11 +245,18 @@ export default function Post() {
         videoData.append("video", selectedVideo)
         api.product.updateVideo(videoData, result.data.data.id)
       }
+      if (priority) {
+        let result = await api.authen.update(userStore.data?.id, { wallet: userStore.data?.wallet - 15000 })
+        if (result.status == 200) {
+          localStorage.setItem('token', result.data.token)
+          dispatch(userAction.setData(result.data.data))
+        }
+      }
       Modal.success({
         title: "Thành công!",
         content: "Bạn đã đăng thành công tin, nhấn Xem tin để đến trang tin của bạn!",
         onOk: () => {
-          // window.location.href = "/"
+          window.location.href = `/user_page/${userStore.data?.id}`
         },
         onCancel: () => {
         }
@@ -323,11 +336,25 @@ export default function Post() {
         videoData.append("video", selectedVideo)
         api.product.updateVideo(videoData, result.data.data.id)
       }
+      if (priority) {
+        let result = await api.authen.update(userStore.data?.id, { wallet: userStore.data?.wallet - 15000 })
+        if (result.status == 200) {
+          localStorage.setItem('token', result.data.token)
+          dispatch(userAction.setData(result.data.data))
+        }
+      }
+      if (priority) {
+        let result = await api.authen.update(userStore.data?.id, { wallet: userStore.data?.wallet - 15000 })
+        if (result.status == 200) {
+          localStorage.setItem('token', result.data.token)
+          dispatch(userAction.setData(result.data.data))
+        }
+      }
       Modal.success({
         title: "Thành công!",
         content: "Bạn đã đăng thành công tin, nhấn Xem tin để đến trang tin của bạn!",
         onOk: () => {
-          // window.location.href = "/"
+          window.location.href = `/user_page/${userStore.data?.id}`
         },
         onCancel: () => {
         }
@@ -406,11 +433,18 @@ export default function Post() {
         videoData.append("video", selectedVideo)
         api.product.updateVideo(videoData, result.data.data.id)
       }
+      if (priority) {
+        let result = await api.authen.update(userStore.data?.id, { wallet: userStore.data?.wallet - 15000 })
+        if (result.status == 200) {
+          localStorage.setItem('token', result.data.token)
+          dispatch(userAction.setData(result.data.data))
+        }
+      }
       Modal.success({
         title: "Thành công!",
         content: "Bạn đã đăng thành công tin, nhấn Xem tin để đến trang tin của bạn!",
         onOk: () => {
-          // window.location.href = "/"
+          window.location.href = `/user_page/${userStore.data?.id}`
         },
         onCancel: () => {
         }
@@ -482,11 +516,18 @@ export default function Post() {
         videoData.append("video", selectedVideo)
         api.product.updateVideo(videoData, result.data.data.id)
       }
+      if (priority) {
+        let result = await api.authen.update(userStore.data?.id, { wallet: userStore.data?.wallet - 15000 })
+        if (result.status == 200) {
+          localStorage.setItem('token', result.data.token)
+          dispatch(userAction.setData(result.data.data))
+        }
+      }
       Modal.success({
         title: "Thành công!",
         content: "Bạn đã đăng thành công tin, nhấn Xem tin để đến trang tin của bạn!",
         onOk: () => {
-          // window.location.href = "/"
+          window.location.href = `/user_page/${userStore.data?.id}`
         },
         onCancel: () => {
         }
@@ -674,14 +715,14 @@ Ví dụ: Nhà mặt tiền số 58 Phan Chu Trinh, Q.Bình Thạnh, 120m². Kh
                 <select id="direction" defaultValue="">
                   <option value="" disabled>Hướng đất<span style={{ color: "red" }}>(*)</span></option>
                   {
-                    ["Đông", "Tây", "Nam", "Bắc","Khác"].map(item => {
+                    ["Đông", "Tây", "Nam", "Bắc", "Khác"].map(item => {
                       return <>
                         <option value={item}>{item}</option>
                       </>
                     })
                   }
                 </select>
-              
+
                 <p>Thông tin khác:</p>
                 <h6>Giấy tờ pháp lý: </h6>
                 <select id="per" defaultValue="">
@@ -1076,7 +1117,7 @@ Ví dụ: Nhà mặt tiền số 58 Phan Chu Trinh, Q.Bình Thạnh, 120m2. Khu
             }>X</span>
             <div>
               <h4 style={{ color: "#49CC90" }}>Tại sao nên đẩy tin ưu tiên ?</h4>
-              <p>Hiển thị nhiều sản phẩm hơn đến người mua, dễ dàng tiếp cận người mua hơn, được ưu tiên trên thanh tìm kiếm!</p>
+              <p>Hiển thị nhiều sản phẩm hơn đến người mua, dễ dàng tiếp cận người mua hơn, được ưu tiên trên thanh tìm kiếm, ưu tiên xét duyệt!</p>
               <p>Thanh toán một lần, tin của bạn sẽ được ưu tiên trong 7 ngày!</p>
               <p style={{ color: "#49CC90" }}>{`Giá ưu tiên cho một tin là ${convertToVND(15000)}`}</p>
               <div>
@@ -1090,8 +1131,9 @@ Ví dụ: Nhà mặt tiền số 58 Phan Chu Trinh, Q.Bình Thạnh, 120m2. Khu
                   return
                 }
                 setPrioriry(true);
-                (document.getElementById('priority') as any).checked = true;
                 setDisplayPrioriry(false);
+                (document.getElementById('priority') as any).checked = true;
+
               }}>Ưu tiên</button>
             </div>
 
@@ -1099,6 +1141,38 @@ Ví dụ: Nhà mặt tiền số 58 Phan Chu Trinh, Q.Bình Thạnh, 120m2. Khu
 
         </div>
       </>}
+
+      {
+        displayPhone && <div className="amount">
+          <form className="subscribe" onSubmit={async (e) => {
+            e.preventDefault();
+            console.log(String((e.target as any).amount.value).length);
+
+            if (String((e.target as any).amount.value).length != 10 && String((e.target as any).amount.value).length != 11) {
+              message.error("Số điện thoại không hợp lệ, vui lòng nhập lại!")
+              return
+            }
+            let result = await api.authen.update(userStore.data?.id, { phoneNumber: String((e.target as any).amount.value) })
+            if (result.status == 200) {
+
+              localStorage.setItem('token', result.data.token)
+              dispatch(userAction.setData(result.data.data))
+              setDisplayPhone(false);
+            } else {
+              Modal.error({
+                title: "Thất bại",
+                content: "Cập nhật số điện thoại thất bại, vui lòng thử lại sau"
+              })
+              window.location.href = "/"
+            }
+          }}>
+            <p>SỐ ĐIỆN THOẠI!</p>
+            <input placeholder="Nhập số điện thoại của bạn" className="subscribe-input" name="amount" type="number" />
+            <br />
+            <button className="submit-btn" type="submit">ĐỒNG Ý</button>
+          </form>
+        </div>
+      }
     </div>
   )
 }

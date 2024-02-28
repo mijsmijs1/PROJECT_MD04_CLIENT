@@ -119,7 +119,7 @@
 
                 .category {
                     display: flex;
-                    margin-top: 10px;
+                    margin-top: 4px;
                     margin-left: 10%;
                     position: relative;
                     transition: all 0.2s;
@@ -185,15 +185,16 @@
 
                         .child_box {
                             position: absolute;
-                                width: 170px;
-                                min-height: 150px;
-                                background-color: $primaryColor;
-                                right: -170px;
-                                top: -152px;
-                                transform: translateY(100%);
-                                border: 2px solid $greenColor;
+                            width: 170px;
+                            min-height: 150px;
+                            background-color: $primaryColor;
+                            right: -170px;
+                            top: -152px;
+                            transform: translateY(100%);
+                            border: 2px solid $greenColor;
+
                             .sup_menu_item_child {
-                                
+
                                 height: 40px;
                                 display: flex;
                                 justify-content: flex-start;
@@ -268,6 +269,7 @@
                             align-items: center;
                             margin-bottom: 5px;
                             flex-direction: column;
+
                             :hover {
                                 cursor: pointer;
                             }
@@ -284,7 +286,8 @@
                             span {
                                 width: 100%;
                                 margin-bottom: 5px;
-                                &:hover{
+
+                                &:hover {
                                     color: $orangeColor;
                                 }
                             }
@@ -321,7 +324,7 @@
             }
 
             .login_logo {
-                width: 38%;
+                width: 40%;
                 display: flex;
                 justify-content: flex-end;
                 align-items: center;
@@ -330,19 +333,25 @@
                     position: relative;
 
                     span {
-                        margin-right: 10px;
+                        margin-right: 5px;
+                        font-size: 18px;
+                        color: $orangeColor;
                     }
 
                     ion-icon {
-                        position: absolute;
-                        top: 10px;
-                        left: 12px;
+                        // position: absolute;
+                        // top: 10px;
+                        // left: 12px;
                     }
                 }
-                .cart_box{
+
+                .cart_box {
                     margin-right: 10px;
                     cursor: pointer;
-                }.cart_box {
+                    position: relative;
+                }
+
+                .cart_box {
                     display: flex;
                     font-size: 33px;
                     justify-content: center;
@@ -350,16 +359,131 @@
                     position: relative;
                     margin-right: 25px;
                     cursor: pointer;
+
+                    &:hover {
+
+                        color: #E03E61;
+
+                        .sup_menu {
+                            display: block;
+                            z-index: 1000;
+                        }
+                    }
+
+                    .sup_menu {
+                        display: none;
+                        position: absolute;
+                        width: 270px;
+                        min-height: 350px;
+                        background-color: $primaryColor;
+                        left: -130px;
+                        bottom: -15px;
+                        transform: translateY(100%);
+                        border: 2px solid $greenColor;
+
+                        &::before {
+                            display: block;
+                            content: "";
+                            width: 100%;
+                            height: 60px;
+                            background-color: transparent;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            transform: translateY(-100%);
+
+                            &:hover {
+                                .sup {
+                                    color: #E03E61;
+                                }
+
+                                .sup_menu {
+                                    display: block;
+                                }
+                            }
+                        }
+
+                        // .child_box {
+                        //     position: absolute;
+                        //         width: 170px;
+                        //         min-height: 150px;
+                        //         background-color: $primaryColor;
+                        //         right: -170px;
+                        //         top: -152px;
+                        //         transform: translateY(100%);
+                        //         border: 2px solid $greenColor;
+                        //     .sup_menu_item_child {
+
+                        //         height: 40px;
+                        //         display: flex;
+                        //         justify-content: flex-start;
+                        //         align-items: center;
+                        //         color: $secondaryColor;
+                        //         transition: all 0.2s;
+                        //         padding: 10px;
+
+                        //         &:hover {
+                        //             background-color: $blueColor;
+                        //             color: black;
+                        //         }
+                        //     }
+                        // }
+
+
+                        .sup_menu_item {
+                            height: 40px;
+                            display: flex;
+                            justify-content: flex-start;
+                            align-items: center;
+                            color: $secondaryColor;
+                            transition: all 0.2s;
+                            padding: 10px;
+
+                            &:hover {
+                                background-color: $blueColor;
+                                color: black;
+                            }
+                            i{
+                                z-index: 10;
+                                &:hover {
+                                    
+                                    color: red;
+                                }
+                            }
+                            img {
+                                width: 30px;
+                                height: 30px;
+                                margin-right: 8px;
+                                margin-left: 0;
+                            }
+
+                            span {
+                                display: inline-block;
+                                /* Đảm bảo span có thể sử dụng max-width */
+                                max-width: 200px;
+                                /* Chiều dài tối đa của span */
+                                overflow: hidden;
+                                /* Ẩn nội dung vượt quá chiều rộng */
+                                text-overflow: ellipsis;
+                                /* Hiển thị dấu chấm ba cho nội dung vượt quá */
+                                white-space: nowrap;
+                                /* Ngăn chữ xuống dòng */
+                            }
+                        }
+                    }
+
                     .cart_icon {
                         ion-icon {
                             font-size: 35px;
                             cursor: pointer;
                         }
-                        i{
-                            font-size: 35px; 
+
+                        i {
+                            font-size: 35px;
                         }
                     }
-                    span{
+
+                    .sum {
                         font-size: 13px;
                         position: absolute;
                         top: -14px;
@@ -494,7 +618,7 @@
             color: #FF5722;
         }
     }
-    
+
     .dropdown-menu {
         width: 50%;
         left: 50%;
@@ -662,7 +786,7 @@
     color: $orangeColor;
     z-index: 1;
     background-color: $primaryColor;
-    width: 150px;
+    width: 156px;
 }
 
 .button_up:before {

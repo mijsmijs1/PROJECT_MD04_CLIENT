@@ -24,9 +24,9 @@ export default function RouteSetup() {
           {/* <Route path='admin/category/list' element={Lazy(() => import("@/pages/admin/pages/categories/List"))()} />
           <Route path='admin/category/recycle' element={Lazy(() => import("@/pages/admin/pages/categories/Recycle"))()} />
           <Route path='admin/brand/list' element={Lazy(() => import("@/pages/admin/pages/brands/List"))()} />
-          <Route path='admin/brand/recycle' element={Lazy(() => import("@/pages/admin/pages/brands/Recycle"))()} />
-          <Route path='admin/user/list' element={Lazy(() => import("@/pages/admin/pages/users/List"))()} />
-          <Route path='admin/user/recycle' element={Lazy(() => import("@/pages/admin/pages/users/Recycle"))()} /> */}
+          <Route path='admin/brand/recycle' element={Lazy(() => import("@/pages/admin/pages/brands/Recycle"))()} /> */}
+          <Route path='user/list' element={Lazy(() => import("@/pages/admin/pages/users/List"))()} />
+          <Route path='user/recycle' element={Lazy(() => import("@/pages/admin/pages/users/Recycle"))()} />
         </Route>
     </Routes>
 

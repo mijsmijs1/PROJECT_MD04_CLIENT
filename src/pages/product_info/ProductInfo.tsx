@@ -9,6 +9,7 @@ import { Store } from '@/store';
 import { api } from '@/service/apis';
 import { productAction } from '@/store/slices/product.slice';
 import { userAction } from '@/store/slices/user.slice';
+import { receiptAction } from '@/store/slices/receipt.slice';
 export default function ProductInfo() {
   const computerType = ['Laptop', 'PC & phụ kiện']
   const phoneType = ['Điện thoại & phụ kiện']
@@ -56,15 +57,29 @@ export default function ProductInfo() {
   useEffect(() => {
 
   }, [categoryName])
-  async function handleAddToCart(productId, quantity, e) {
+  async function handleAddToCart(product, quantity, e) {
     try {
-      let item = {
-        productId,
-        quantity
+      if(product.userId == userStore.data.id){
+        Modal.error({
+          title: 'Error',
+          content: "Bạn không thể lưu tin của chính mình!",
+          onOk: () => {
+  
+          }
+        })
+        return
       }
-      // let result = await api.receipt.addToCart(item);
+      let item = {
+        productId: product?.id
+      }
+      let result = await api.receipt.addToCart(item);
+      Modal.success({
+        title: "Notication",
+        content: "Sản phẩm đã được thêm vào giỏ hàng của bạn!",
+        onOk() { }
+      })
 
-      // dispatch(receiptAction.setCart(result.data.data))
+      dispatch(receiptAction.setCart(result.data.data))
     } catch (err) {
       Modal.error({
         title: 'Error',
@@ -143,7 +158,7 @@ export default function ProductInfo() {
           <div className="dashed">
             <div className="dashed-line"></div>
           </div>
-          <div className='img_info'>
+          {/* <div className='img_info'> */}
             {/* HTML5 Video Tag */}
             {
               product[0]?.videoUrl && <>
@@ -153,16 +168,17 @@ export default function ProductInfo() {
                   height="90%"
                   width="100%"
                   controls autoPlay={false}
+                  muted
                 >
                   <source
-                    src={`${import.meta.env.VITE_SV_API_URL}/product/video/streaming/?code=${product[0]?.videoUrl}`}
+                    src={product[0].videoUrl  && `${import.meta.env.VITE_SV_API_URL}/product/video/streaming/?code=${product[0]?.videoUrl}`}
                     type="video/mp4"
                   />
                 </video>
               </>
             }
 
-          </div>
+          {/* </div> */}
         </div>
         <div className='info_detail'>
           <div className='name'>
@@ -195,12 +211,8 @@ export default function ProductInfo() {
 
             {product[0]?.branchId == 6 && <button
               onClick={(e) => {
-                handleAddToCart(product[0]?.id, 1, e)
-                Modal.success({
-                  title: "Notication",
-                  content: "Sản phẩm đã được thêm vào giỏ hàng của bạn!",
-                  onOk() { }
-                })
+                handleAddToCart(product[0], 1, e)
+                
               }}>
               Mua ngay! <div className="star-1">
                 <svg
@@ -355,12 +367,7 @@ export default function ProductInfo() {
             </button>}
             {product[0]?.branchId !== 6 && <button
               onClick={(e) => {
-                handleAddToCart(product[0]?.id, 1, e)
-                Modal.success({
-                  title: "Notication",
-                  content: "Sản phẩm đã được thêm vào giỏ hàng của bạn!",
-                  onOk() { }
-                })
+                handleAddToCart(product[0], 1, e)
               }}>
               Lưu tin! <div className="star-1">
                 <svg

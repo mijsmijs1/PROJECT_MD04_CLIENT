@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import MultiLanguage from "../multiLang/MultiLang";
 import { logout } from "@/service/firebase";
 import { api } from "@/service/apis";
+import { receiptAction } from "@/store/slices/receipt.slice";
 export default function Navbar({ modalVisible, setModalVisible }) {
   const { t } = useTranslation();
   const dispatch = useDispatch()
@@ -89,14 +90,14 @@ export default function Navbar({ modalVisible, setModalVisible }) {
     <div className="nav_box">
       <div className="nav_top">
         <div className="left">
-          <a>Đóng góp ý kiến</a>
-          <a>Tải ứng dụng</a>
-          <a>Kết nối </a><i className="fa-brands fa-facebook"></i><i className="fa-brands fa-youtube"></i>
+          <a>{t('navbar.categoryMall')}</a>
+          <a>{t('navbar.GetApp')}</a>
+          <a>{t('navbar.connect')} </a><i className="fa-brands fa-facebook"></i><i className="fa-brands fa-youtube"></i>
         </div>
         <div className="right">
           <div>
             <i className="fa-solid fa-comments-dollar"></i>
-            <p>Trợ giúp</p>
+            <p>{t('navbar.help')}</p>
           </div>
           <div>
             <i className="fa-solid fa-language"></i>
@@ -112,7 +113,7 @@ export default function Navbar({ modalVisible, setModalVisible }) {
             }} />
             <div className="category">
               <ion-icon name="apps-outline"></ion-icon>
-              <p>Danh mục</p>
+              <p>{t('navbar.category')}</p>
               <ion-icon name="chevron-down-outline"></ion-icon>
               {
                 categoryStore.category && (
@@ -140,7 +141,7 @@ export default function Navbar({ modalVisible, setModalVisible }) {
                       })}
                     {category && <div className="child_box">
                       {
-                        category && category.branches.map(branch => {
+                        category && category.branches?.map(branch => {
                           return (
                             <div onClick={() => {
                               navigate(`/search?category=${category.codeName}&&branch=${branch.codeName}`)
@@ -229,17 +230,57 @@ export default function Navbar({ modalVisible, setModalVisible }) {
                   </svg>
                 </button> : <>
                   <div className='cart_box'
-                  onClick={() => {
-                    navigate("/cart")
-                  }}>
-                    <i className="fa-brands fa-shopify"></i>
-                    <span>
+                    >
+                    <i onClick={() => {
+                      navigate("/cart")
+                    }} className="fa-brands fa-shopify"></i>
+                    <span className="sum">
                       ({
-                        receiptStore.cart?.detail?.reduce((total, cur) => {
-                          return total + cur.quantity
-                        }, 0) || 0
+                        receiptStore.cart?.detail?.length || 0
                       })
                     </span>
+                    {
+                      true && (
+                        <div className='sup_menu'
+                          onMouseLeave={handleMouseLeave}>
+
+                          {
+                           receiptStore.cart ? receiptStore.cart?.detail?.map(supItem => {
+
+
+                              return (
+                                <div 
+                                  key={Date.now() * Math.random()}
+                                  className='sup_menu_item'
+                                  onMouseEnter={() => { handleMouseEnter(supItem) }}
+
+                                >
+                                  <img src={`${import.meta.env.VITE_SV_HOST}/${supItem.products.avatar}`}></img>
+                                  <span
+                                  onClick={() => {
+                                    window.location.href=`/product-info?productId=${supItem.productId}`
+                                  }}
+                                  >{supItem.products.name}</span>
+                                  <i 
+                                    onClick={()=>{
+                                      Modal.confirm({
+                                        title: "Confirm",
+                                        content: "Bạn có chắc muốn xóa tin này?",
+                                        onOk: async () => {
+                                            let result = await api.receipt.delete(supItem.id);
+                                            dispatch(receiptAction.deleteItem(supItem.id));
+                                        }
+                                    })
+                                    }}
+                                  
+                                  className="fa-solid fa-calendar-xmark"></i>
+                                </div>
+                              )
+                            }) : <img style={{width:"100%",height:"150px"}} src="https://elements-cover-images-0.imgix.net/05a48f9e-c24f-40f2-bbf6-6dde8c2f77d0?auto=compress%2Cformat&w=900&fit=max&s=98115fe5c0ab12c459343cc3c758d5e5"></img>
+                          }
+                        </div>
+                      )
+                    }
                   </div>
                   <div className="user_box">
                     <Dropdown>
@@ -281,7 +322,7 @@ export default function Navbar({ modalVisible, setModalVisible }) {
               message.warning('Bạn chưa đăng nhập!');
               openModal()
             };
-          }}><i className="fa-solid fa-pen-to-square" ></i> Đăng tin</button>
+          }}><i className="fa-solid fa-pen-to-square" ></i> {t('navbar.post')}</button>
         </animated.div>
         <div className="navbar_mobile_child"></div>
         <div className="navbar_mobile">

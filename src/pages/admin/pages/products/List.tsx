@@ -38,7 +38,51 @@ export default function List() {
     const [showDetail, setShowDetail] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
+    const [displayPic, setDisplayPic] = useState(false);
+    const [displayVideo, setDisplayVideo] = useState(false);
     const [detail, setDetail] = useState(null)
+    const activeProducts = productStore.product?.filter((item) => item?.status == "inactive" && item?.moderationStatus == "inactive");
+    const priorityProducts = activeProducts?.filter((item) => item?.priorityStatus == "active");
+    const normalProducts = activeProducts?.filter((item) => item?.priorityStatus == "inactive");
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isHovered, setIsHovered] = useState(false);
+    const [timer, setTimer] = useState(null);
+    const [images, setImages] = useState([])
+    const [video, setVideo] = useState(null)
+    // const images = [
+    //     'https://cdn.chotot.com/admincentre/1TJBfw07vIEUSPGyd90uAoMZJypUK4dVG1AQLK3XIak/preset:raw/plain/429d11f453939a67bda41fc67bfdab94-2863323975732322441.jpg',
+    //     'https://cdn.chotot.com/admincentre/io-GtFL8wLcKnU7X6yMrfXk00RLrLoBJYUlut8shtyQ/preset:raw/plain/96bcfe1cc4669461c77550934d16ec3b-2840707957964015892.jpg',
+    //     'https://cdn.chotot.com/admincentre/n7qtGDKACkBUcIBngZ8k6UTViVhsvmUdNsUnxzxGZGU/preset:raw/plain/535ac1ee75274be158be148cdae80735-2862504091815441220.jpg'
+    // ];
+
+    const goToNextSlide = () => {
+        setCurrentIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
+    };
+
+    const goToPrevSlide = () => {
+        setCurrentIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
+    };
+
+    const handleHover = () => {
+        setIsHovered((prevState) => !prevState);
+    };
+
+    useEffect(() => {
+        if (!isHovered) {
+            setTimer(
+                setInterval(() => {
+                    goToNextSlide();
+                }, 3000)
+            );
+        } else {
+            clearInterval(timer);
+        }
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, [isHovered]);
     return (
         <>
             {/* {
@@ -46,6 +90,69 @@ export default function List() {
             } */}
             {
                 showDes && <DescribeShow showDes={showDes} setShowDes={setShowDes} updateData={updateData} setupdateData={setupdateData} />
+            }
+            {
+                displayPic && <div className='product_describe_form'>
+                    <div className='carousel_box'>
+                        <button onClick={() => {
+                            setDisplayPic(!displayPic)
+                        }} type='button' className='btn btn-danger'>X</button>
+                        <div className='carousel_app'>
+                            <div
+                                className="carousel"
+                                style={{ width: '80%', height: '640px' }}
+                                onMouseEnter={handleHover}
+                                onMouseLeave={handleHover}
+                            >
+                                <img src={`${import.meta.env.VITE_SV_HOST}/${images[currentIndex]}`} alt="carousel slide" />
+
+                                {isHovered && (
+                                    <div className="navigation">
+                                        <button type="button" className="btn " onClick={goToPrevSlide}><ion-icon name="chevron-back-outline"></ion-icon></button>
+                                        <button type="button" className="btn " onClick={goToNextSlide}><ion-icon name="chevron-forward-outline"></ion-icon></button>
+                                    </div>
+                                )}
+
+                                <div className="mydots">
+                                    {images.map((image, index) => (
+                                        <span
+                                            key={index}
+                                            className={index === currentIndex ? 'active' : ''}
+                                            onClick={() => setCurrentIndex(index)}
+                                        ></span>
+                                    ))}
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            }
+            {
+                displayVideo && <div className='product_describe_form'>
+                    <div className='carousel_box'>
+                        <button onClick={() => {
+                            setDisplayVideo(!displayVideo)
+                        }} type='button' className='btn btn-danger close'>X</button>
+                        <div className='carousel_app'>
+                            
+                            <video
+                                id="videoPlayer"
+                                height="90%"
+                                width="100%"
+                                controls autoPlay={false}
+                            >
+                                <source
+                                    src={`${import.meta.env.VITE_SV_API_URL}/product/video/streaming/?code=${video}`}
+                                    type="video/mp4"
+                                />
+                            </video>
+
+                        </div>
+
+                    </div>
+                </div>
             }
             {
                 showInfo &&
@@ -212,14 +319,17 @@ export default function List() {
                         {/* <th>Category</th>
                         <th>Brand</th> */}
                         <th>Price</th>
+                        <th>Status</th>
                         <th>Des</th>
                         <th>Detail</th>
+                        <th>Pic</th>
+                        <th>Video</th>
                         <th>Tools</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
-                        productStore.product?.map((product, index) => {
+                        priorityProducts?.map((product, index) => {
                             if (product.status == "inactive" && product.moderationStatus == "inactive") {
                                 return (
                                     <tr key={randomId()}>
@@ -229,6 +339,11 @@ export default function List() {
                                         </td>
                                         <td >{product.name}</td>
                                         <td>{convertToVND(product.price)}</td>
+                                        <td>{product.priorityStatus == "active" ? <span className='priority_logo_vip'>
+                                            <i className="fa-regular fa-circle-up"></i>
+                                            <span>ƯU TIÊN</span>
+                                        </span> : <span>TIN THƯỜNG</span>}</td>
+
                                         <td>
                                             <button
                                                 onClick={() => {
@@ -249,6 +364,28 @@ export default function List() {
                                         </td>
                                         <td>
                                             <button
+                                                className='btn btn-primary'
+                                                onClick={() => {
+                                                    setDisplayPic(true)
+                                                    setImages(product.imgs?.map(item => item.imgUrl))
+                                                }}
+                                            >
+                                                More
+                                            </button>
+                                        </td>
+                                        <td>
+                                            {product.videoUrl ? <button
+                                                className='btn btn-primary'
+                                                onClick={() => {
+                                                    setDisplayVideo(true)
+                                                    setVideo(product.videoUrl)
+                                                }}
+                                            >
+                                                More
+                                            </button> : <span>None</span>}
+                                        </td>
+                                        <td>
+                                            <button
                                                 onClick={() => {
                                                     // setShowEdit(!showEdit);
                                                     // setupdateData({ product })
@@ -257,7 +394,7 @@ export default function List() {
                                                         content: `Are you sure you want to agree this product?`,
                                                         onOk: async () => {
                                                             try {
-                                                                let result = await api.product.update(product.id, { moderationStatus: 'active', status:"active" })
+                                                                let result = await api.product.update(product.id, { moderationStatus: 'active', status: "active" })
                                                                 if (result.status == 200) {
                                                                     dispatch(productAction.update(result.data.data))
                                                                 }
@@ -271,7 +408,7 @@ export default function List() {
                                                 }}
                                                 className='btn btn-success' style={{ marginRight: 5 }}>
                                                 Agree</button>
-                                                <button
+                                            <button
                                                 onClick={() => {
                                                     // setShowEdit(!showEdit);
                                                     // setupdateData({ product })
@@ -280,7 +417,7 @@ export default function List() {
                                                         content: `Are you sure you want to agree and push this product?`,
                                                         onOk: async () => {
                                                             try {
-                                                                let result = await api.product.update(product.id, { moderationStatus: 'active', status:"active",priorityStatus:"active" })
+                                                                let result = await api.product.update(product.id, { moderationStatus: 'active', status: "active", priorityStatus: "active" })
                                                                 if (result.status == 200) {
                                                                     dispatch(productAction.update(result.data.data))
                                                                 }
@@ -302,7 +439,149 @@ export default function List() {
                                                             content: `Are you sure you want to block this product?`,
                                                             onOk: async () => {
                                                                 try {
-                                                                    let result = await api.product.update(product.id, { status: 'delete' })
+                                                                    if (product.priorityStatus == "active") {
+                                                                        let data = await api.authen.getUserById(product.userId)
+                                                                        api.authen.update(product.userId, { wallet: data.data.data?.wallet + 15000 })
+                                                                    }
+
+                                                                    let result = await api.product.update(product.id, { status: 'delete', priorityStatus: "inactive" })
+                                                                    if (result.status == 200) {
+                                                                        dispatch(productAction.update(result.data.data))
+                                                                    }
+                                                                } catch (err) {
+                                                                    console.log('err', err);
+                                                                }
+                                                            },
+                                                            onCancel: () => { }
+
+                                                        })
+                                                    }}
+                                                    className="btn btn-danger"
+                                                >Block</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                )
+                            }
+                        })
+                    }
+                    {
+                        normalProducts?.map((product, index) => {
+                            if (product.status == "inactive" && product.moderationStatus == "inactive") {
+                                return (
+                                    <tr key={randomId()}>
+                                        <td>{index + 1}</td>
+                                        <td>
+                                            <img src={`${import.meta.env.VITE_SV_HOST}/${product.avatar}`} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
+                                        </td>
+                                        <td >{product.name}</td>
+                                        <td>{convertToVND(product.price)}</td>
+                                        <td>{product.priorityStatus == "active" ? <span className='priority_logo_vip'>
+                                            <i className="fa-regular fa-circle-up"></i>
+                                            <span>ƯU TIÊN</span>
+                                        </span> : <span>TIN THƯỜNG</span>}</td>
+
+                                        <td>
+                                            <button
+                                                onClick={() => {
+                                                    setShowDes(!showDes);
+                                                    setupdateData({ id: product.id, des: JSON.parse(product.detail).desc })
+                                                }}
+                                                className='btn btn-primary'>More</button>
+                                        </td>
+                                        <td>
+                                            <button
+                                                onClick={() => {
+                                                    // setShowDetail(!showDetail);
+                                                    // setupdateData({ id: product.id, category: product.category.title, detail: JSON.parse(product.detail) })
+                                                    setShowInfo(!showInfo);
+                                                    setDetail(JSON.parse(product.detail))
+                                                }}
+                                                className='btn btn-primary'>More</button>
+                                        </td>
+                                        <td>
+                                            <button
+                                                className='btn btn-primary'
+                                                onClick={() => {
+                                                    setDisplayPic(true)
+                                                    setImages(product.imgs?.map(item => item.imgUrl))
+                                                }}
+                                            >
+                                                More
+                                            </button>
+                                        </td>
+                                        <td>
+                                            {product.videoUrl ? <button
+                                                className='btn btn-primary'
+                                                onClick={() => {
+                                                    setDisplayVideo(true)
+                                                    setVideo(product.videoUrl)
+                                                }}
+                                            >
+                                                More
+                                            </button> : <span>None</span>}
+                                        </td>
+                                        <td>
+                                            <button
+                                                onClick={() => {
+                                                    // setShowEdit(!showEdit);
+                                                    // setupdateData({ product })
+                                                    Modal.confirm({
+                                                        title: "Success",
+                                                        content: `Are you sure you want to agree this product?`,
+                                                        onOk: async () => {
+                                                            try {
+                                                                let result = await api.product.update(product.id, { moderationStatus: 'active', status: "active" })
+                                                                if (result.status == 200) {
+                                                                    dispatch(productAction.update(result.data.data))
+                                                                }
+                                                            } catch (err) {
+                                                                console.log('err', err);
+                                                            }
+                                                        },
+                                                        onCancel: () => { }
+
+                                                    })
+                                                }}
+                                                className='btn btn-success' style={{ marginRight: 5 }}>
+                                                Agree</button>
+                                            <button
+                                                onClick={() => {
+                                                    // setShowEdit(!showEdit);
+                                                    // setupdateData({ product })
+                                                    Modal.confirm({
+                                                        title: "Success",
+                                                        content: `Are you sure you want to agree and push this product?`,
+                                                        onOk: async () => {
+                                                            try {
+                                                                let result = await api.product.update(product.id, { moderationStatus: 'active', status: "active", priorityStatus: "active" })
+                                                                if (result.status == 200) {
+                                                                    dispatch(productAction.update(result.data.data))
+                                                                }
+                                                            } catch (err) {
+                                                                console.log('err', err);
+                                                            }
+                                                        },
+                                                        onCancel: () => { }
+
+                                                    })
+                                                }}
+                                                className='btn btn-success' style={{ marginRight: 5 }}>
+                                                Priority</button>
+                                            {
+                                                <button
+                                                    onClick={() => {
+                                                        Modal.confirm({
+                                                            title: "Warning",
+                                                            content: `Are you sure you want to block this product?`,
+                                                            onOk: async () => {
+                                                                try {
+                                                                    if (product.priorityStatus == "active") {
+                                                                        let data = await api.authen.getUserById(product.userId)
+                                                                        api.authen.update(product.userId, { wallet: data.data.data?.wallet + 15000 })
+                                                                    }
+
+                                                                    let result = await api.product.update(product.id, { status: 'delete', priorityStatus: "inactive" })
                                                                     if (result.status == 200) {
                                                                         dispatch(productAction.update(result.data.data))
                                                                     }

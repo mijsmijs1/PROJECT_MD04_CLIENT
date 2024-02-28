@@ -6,16 +6,18 @@ import { Table, Modal, Button } from 'react-bootstrap';
 import { randomId, convertToVND } from '@mieuteacher/meomeojs';
 import { useSelector, useDispatch } from 'react-redux';
 import UserCreateForm from './components/UserCreateForm';
-import { userAction } from '@slices/user.slice';
+
 import { receiptAction } from '../../../../store/slices/receipt.slice';
 import UserEditForm from './components/UserEditForm';
+import { Store } from '@/store';
+import { userAction } from '@/store/slices/user.slice';
 import { api } from '@/service/apis';
 export default function List() {
     const dispatch = useDispatch()
-    const userStore = useSelector(store => store.userStore);
-    const receiptStore = useSelector(store => store.receiptStore);
+    const userStore = useSelector((store: Store) => store.userStore)
+    const receiptStore = useSelector((store: Store) => store.receiptStore)
     const [showAddress, setShowAddress] = useState(false);
-    const [updateData, setupdateData] = useState({});
+    const [updateData, setupdateData] = useState(null);
     const [showIp, setShowIp] = useState(false);
     const [showReceipt, setShowReceipt] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
@@ -35,7 +37,7 @@ export default function List() {
     };
     const handleConfirm = async () => {
         try {
-            let result = await api.authen.update(updateData.id, { role: updateData.role, status: false });
+            let result = await api.authen.update(updateData.id, { status: false });
             if (result.status == 200) {
                 dispatch(userAction.update(result.data.data));
             }
@@ -55,7 +57,7 @@ export default function List() {
         try {
             api.authen.findMany()
                 .then(async (res) => {
-                    dispatch(userAction.setList(res.data.data))
+                    dispatch(userAction.setList(Object.values(res.data.data)))
                 })
                 .catch(err => {
                     console.log(err);
@@ -63,26 +65,17 @@ export default function List() {
         } catch (err) {
             console.log(err);
         }
-        if (userStore.data.role == "master") {
-            users = userStore.list
-        } else {
-            users = userStore.list.filter(item => item.role != "master")
-        }
         console.log("da vao effect");
     }, [getUser])
-    if (userStore.data.role == "master") {
-        users = userStore.list
-    } else {
-        users = userStore.list.filter(item => item.role != "master")
-    }
+
     return (
         <>
-            {/* {
+            {
                 userStore.addModal && <UserCreateForm dispatch={dispatch} />
             }
             {
                 showEdit && <UserEditForm showEdit={showEdit} setShowEdit={setShowEdit} updateData={updateData} />
-            } */}
+            }
             <h4>User List</h4>
             <Table striped bordered hover>
                 <thead>
@@ -92,16 +85,16 @@ export default function List() {
                         <th>Email</th>
                         <th>Create At</th>
                         <th>Update At</th>
-                        <th>Role</th>
+                       
                         <th>Address</th>
                         <th>Ip list</th>
-                        <th>Receipts</th>
+                        {/* <th>Receipts</th> */}
                         <th>Tools</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
-                        users.map((item, index) => {
+                        userStore.list?.map((item, index) => {
                             if (item.status) {
                                 return (
                                     <tr key={randomId()}>
@@ -110,7 +103,7 @@ export default function List() {
                                         <td >{item.email}</td>
                                         <td >{item.createAt ? (new Date(Number(item.createAt))).toLocaleString('en-GB', options) : "null"}</td>
                                         <td >{item.updateAt ? (new Date(Number(item.updateAt))).toLocaleString('en-GB', options) : "null"}</td>
-                                        <td >{item.role}</td>
+                                        
                                         <td ><button
                                             onClick={() => {
                                                 setShowAddress(!showAddress)
@@ -123,12 +116,12 @@ export default function List() {
                                                 setupdateData(item)
                                             }}
                                             className="btn btn-primary">Show & Edit</button></td>
-                                        <td ><button
+                                        {/* <td ><button
                                             onClick={() => {
                                                 setShowReceipt(!showReceipt)
                                                 setupdateData(item)
                                             }}
-                                            className="btn btn-primary">Show & Edit</button></td>
+                                            className="btn btn-primary">Show & Edit</button></td> */}
 
                                         <td>
                                             <button
@@ -138,7 +131,7 @@ export default function List() {
                                                 }}
                                                 className="btn btn-primary" style={{ marginRight: 5 }}>Edit</button>
                                             {
-                                                !(item.role == "master") && <button
+                                                  <button
                                                     onClick={() => {
                                                         setShow(true)
                                                         setupdateData(item)
@@ -216,19 +209,19 @@ export default function List() {
                                 <tr>
                                     <th>#</th>
                                     <th>IP</th>
-                                    <th>Device Name</th>
+                                    {/* <th>Device Name</th> */}
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
-                                    updateData.user_ip_list?.map((item, index) => {
+                                    JSON.parse(updateData.ipList)?.map((item, index) => {
                                         return (
                                             <tr key={randomId()}>
                                                 <td>{index + 1}</td>
-                                                <td >{item.ip}</td>
-                                                <td >{item.deviceName}</td>
-                                                <td style={{ color: item.status ? "green" : "red" }}>{item.status ? "Active" : "Block"}</td>
+                                                <td >{item}</td>
+                                                {/* <td >{item.deviceName}</td> */}
+                                                <td style={{ color: !item.status ? "green" : "red" }}>{!item.status ? "Active" : "Block"}</td>
                                             </tr>
                                         )
 

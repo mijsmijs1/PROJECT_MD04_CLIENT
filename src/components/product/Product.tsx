@@ -7,7 +7,9 @@ import { productAction } from '@/store/slices/product.slice'
 import { convertToVND } from '@mieuteacher/meomeojs';
 import { Store } from '@/store'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 export function Product() {
+  const { t } = useTranslation();
   const [productCount, setProductCount] = useState(0);
   const options = {
     day: '2-digit',
@@ -54,7 +56,7 @@ export function Product() {
   console.log('normalProducts', normalProducts);
   return (
     <div className='product_box'>
-      <h3>Tin đăng dành cho bạn</h3>
+      <h3>{t('product.PostForYou')}</h3>
 
       <div className='content'>
         {priorityProducts &&
